@@ -269,7 +269,7 @@ LOG_LEVEL=info
 **Descripción de variables Backend:**
 
 **Servidor:**
-- `PORT`: Puerto del servidor backend (default: 8000)
+- `PORT`: Puerto del servidor backend (default: 3000)
 - `NODE_ENV`: Entorno de ejecución (`development`, `production`, `test`)
 
 **Base de Datos:**
@@ -492,11 +492,11 @@ docker exec -i mysql_db mysql -u root -p"$MYSQL_ROOT_PASSWORD" chat_db < ruta/a/
 
 - **Primer inicio**: La instalación de dependencias del Backend puede tardar 2-5 minutos
 - **Modelos LLM**: La descarga puede tardar 5-15 minutos según el modelo
-- **Puertos usados**: 3306 (MySQL), 5500 (Frontend), 8000 (Backend), 8080 (phpMyAdmin), 11434 (Ollama)
+- **Puertos usados**: 3306 (MySQL), 5500 (Frontend), 3000 (Backend), 8080 (phpMyAdmin), 11434 (Ollama)
 - **Producción**: Este setup es para desarrollo. Para producción, configurar variables de entorno seguras y reverse proxy (nginx/Apache)
 
 ---
 
 ## 🙋🏼 Soporte
 
-Para problemas o preguntas, consulta la documentación en `Backend/Docs/` o contacta al equipo de desarrollo.
+Para problemas o preguntas, consulta la documentación en `Backend/Docs/`.
