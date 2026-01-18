@@ -69,8 +69,6 @@ Sistema de chat inteligente para consultas sobre productos Fortinet, potenciado 
 
 ```bash
 git clone <repo-url>
-cd "repositorio desarollo"
-pnpm install
 ```
 
 ### 2️⃣ Configurar variables de entorno
@@ -81,6 +79,7 @@ cp "Base de datos (Docker)/.env.example" "Base de datos (Docker)/.env"
 
 # Edita el .env con tus credenciales MySQL
 # Ejemplo: MYSQL_ROOT_PASSWORD=tuPassword123
+# SE RECOMIENDA DEJAR EL NOMBRE DE LA BASE DE DATOS COMO chat_db
 ```
 
 ```bash
