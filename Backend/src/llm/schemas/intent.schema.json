@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Intent Extraction Schema",
+  "description": "Schema para validar las intenciones extraídas de consultas de usuarios",
+  "type": "object",
+  "properties": {
+    "entity": {
+      "type": "string",
+      "enum": ["product"],
+      "description": "La entidad sobre la que el usuario consulta (solo product es válido)"
+    },
+    "filters": {
+      "type": "object",
+      "properties": {
+        "brand": {
+          "type": ["string", "null"],
+          "description": "Marca del producto buscado"
+        },
+        "unit": {
+          "type": ["string", "null"],
+          "description": "UNIT del producto base (ej: FortiGate-50G)"
+        },
+        "variant": {
+          "type": ["string", "null"],
+          "description": "SKU de la variante específica (ej: FG-50G-BDL-809-DD)"
+        }
+      },
+      "required": ["brand", "unit", "variant"],
+      "additionalProperties": false,
+      "description": "Filtros para buscar el producto y su variante"
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Nombres exactos de las columnas del modelo Datasheet que el usuario quiere conocer"
+    }
+  },
+  "required": ["entity", "filters", "fields"],
+  "additionalProperties": false
+}

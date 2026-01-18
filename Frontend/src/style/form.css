@@ -1,0 +1,15 @@
+.contenedor_imagen_header {
+    width: 5rem;
+    height: 5rem;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#logo-wexler {
+    background-image: url("../img/wexler.png");
+}
+#logo-fortinet {
+    transform: scale(2);
+    background-image: url("../img/fortinet.png");
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+
+  <head>
+
+    <!-- Metadatos -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="src/img/lib/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="src/img/lib/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="src/img/lib/favicon-16x16.png">
+    <link rel="manifest" href="src/img/lib/site.webmanifest">
+    
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="src/style/style.css">
+    <link rel="stylesheet" href="src/style/form.css">
+
+    <!-- Titulo pestaña -->
+    <title>Chatbot Fortinet</title>
+
+  </head>
+
+  <body
+    class="bg-gradient-to-br from-red-800 via-gray-900 to-black text-white flex flex-col items-center justify-center min-h-screen p-4">
+
+    <!-- Contenedor principal -->
+    <div
+      class="w-full max-w-3xl bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl flex flex-col h-[80vh] border border-red-600">
+
+      <!-- Header con logos -->
+      <header class="
+        relative flex items-center justify-around p-5  bg-white rounded-t-3xl shadow-lg border-b-4 border-red-600 
+        
+      "> <!-- Celulares y moviles max-sm:bg-green-500 -->
+
+        <!-- Logo Fortinet -->
+        <div id="logo-fortinet" class="contenedor_imagen_header">
+        </div>
+
+        <!-- Título -->
+        <div>
+          <h1 class="text-3xl font-extrabold text-gray-900 text-center tracking-wide">
+            Asistente <span class="text-red-700">Fortinet</span>
+          </h1>
+        </div>
+
+        <!-- Logo Wexler -->
+        <div id="logo-wexler" class="contenedor_imagen_header">
+        </div>
+
+      </header>
+
+      <!-- Área del chat -->
+      <div id="chatbox" class="flex-1 overflow-y-auto p-4 space-y-4 text-sm text-gray-100">
+        <!-- Mensaje inicial como si fuera del chatbot -->
+        <div class="text-left">
+          <div class="inline-block bg-gray-800 text-gray-200 px-4 py-3 rounded-2xl border border-red-600 shadow-md">
+            👋 ¡Hola! Soy tu asesor de productos <strong>Fortinet</strong>.
+            Estoy aquí para ayudarte con soluciones de seguridad y tecnología. ¿Qué deseas consultar hoy?
+          </div>
+        </div>
+      </div>
+
+      <!-- Entrada de texto -->
+      <form id="chat-form" class="flex items-center p-4 border-t border-gray-700 bg-gray-900 rounded-b-3xl">
+        <textarea id="user-input" placeholder="Escribe tu mensaje aquí..." rows="2"
+          class="flex-1 p-3 text-gray-900 rounded-2xl resize-none border-2 border-gray-400 focus:border-red-600 focus:outline-none text-base"></textarea>
+        <button type="submit"
+          class="ml-3 bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-2xl shadow-md transition duration-200">
+          Enviar
+        </button>
+      </form>
+
+    </div>
+
+    <!-- PopUp - Carga de documentos -->
+    <button id="settings-btn" aria-label="Configuración" title="Configuración"
+      class="bg-black rounded-full w-16 h-16 fixed bottom-8 right-8 text-white text-3xl font-bold shadow-lg hover:bg-slate-800 transition md:block hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 mx-auto">
+        <path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z"></path>
+        <path d="M19.43 12.98a7.5 7.5 0 0 0 0-1.96l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.6-.22l-2.49 1a7.4 7.4 0 0 0-1.7-.98l-.38-2.65A.5.5 0 0 0 12.6 1h-4a.5.5 0 0 0-.5.42l-.38 2.65a7.4 7.4 0 0 0-1.7.98l-2.49-1a.5.5 0 0 0-.6.22l-2 3.46a.5.5 0 0 0 .12.64L4.57 11a7.5 7.5 0 0 0 0 1.96l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46c.14.24.43.34.68.24l2.49-1c.52.4 1.08.73 1.7.98l.38 2.65c.06.28.29.42.5.42h4c.21 0 .44-.14.5-.42l.38-2.65c.62-.25 1.18-.58 1.7-.98l2.49 1c.25.1.54 0 .68-.24l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65zM12 17.5A5.5 5.5 0 1 1 12 6.5a5.5 5.5 0 0 1 0 11z"/>
+      </svg>
+    </button>
+
+    <!-- Librerias JS -->
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Diseños -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Aleras -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script> <!-- Procesamiento documentos Excel  -->
+
+    <!-- Script -->
+    <script src="./main.js" type="module"></script>
+    
+  </body>
+
+</html>

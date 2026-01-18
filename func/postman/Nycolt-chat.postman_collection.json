@@ -1,0 +1,219 @@
+{
+  "info": {
+    "_postman_id": "aa543da2-6f64-4632-8dad-dace26d3f4ce",
+    "name": "Nycolt/chat",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "22038257"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();\r",
+              "pm.environment.set(\"Token\", jsonData.data.token);\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"Usuario\":\"Admin_Wexler\",\r\n    \"Credencial\":\"wexlerhelpchat2026\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL}}/api/v1/auth/login",
+          "host": [
+            "{{URL}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Registrar",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"Usuario\":\"Admin_Wexler\",\r\n    \"Credencial\":\"wexlerhelpchat2026\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL}}/api/v1/auth/register",
+          "host": [
+            "{{URL}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cargar excel",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n    {\r\n        \"UNIT\": \"A1\",\r\n        \"SKU\": \"A2\",\r\n        \"Descripcion\": \"A3\",\r\n        \"Price\": \"A4\",\r\n        \"OneYearContract\": \"A5\",\r\n        \"ThirdYearContract\": \"A6\",\r\n        \"FiveYearContract\": \"A7\",\r\n        \"Familia\": \"FortiGate\"\r\n    },\r\n    {\r\n        \"UNIT\": \"A8\",\r\n        \"SKU\": \"A9\",\r\n        \"Descripcion\": \"A10\",\r\n        \"Price\": \"A11\",\r\n        \"OneYearContract\": \"A12\",\r\n        \"ThirdYearContract\": \"A13\",\r\n        \"FiveYearContract\": \"A14\",\r\n        \"Familia\": \"FortiGate\"\r\n    },\r\n    {\r\n        \"UNIT\": \"B1\",\r\n        \"SKU\": \"B2\",\r\n        \"Descripcion\": \"B3\",\r\n        \"Price\": \"B4\",\r\n        \"OneYearContract\": \"B5\",\r\n        \"ThirdYearContract\": \"B6\",\r\n        \"FiveYearContract\": \"B7\",\r\n        \"Familia\": \"FortiWiFi\"\r\n    },\r\n    {\r\n        \"UNIT\": \"B8\",\r\n        \"SKU\": \"B9\",\r\n        \"Descripcion\": \"B10\",\r\n        \"Price\": \"B11\",\r\n        \"OneYearContract\": \"B12\",\r\n        \"ThirdYearContract\": \"B13\",\r\n        \"FiveYearContract\": \"B14\",\r\n        \"Familia\": \"FortiWiFi\"\r\n    },\r\n    {\r\n        \"UNIT\": \"C1\",\r\n        \"SKU\": \"C2\",\r\n        \"Descripcion\": \"C3\",\r\n        \"Price\": \"C4\",\r\n        \"OneYearContract\": \"C5\",\r\n        \"ThirdYearContract\": \"C6\",\r\n        \"FiveYearContract\": \"C7\",\r\n        \"Familia\": \"FortiGate VM\"\r\n    },\r\n    {\r\n        \"UNIT\": \"C8\",\r\n        \"SKU\": \"C9\",\r\n        \"Descripcion\": \"C10\",\r\n        \"Price\": \"C11\",\r\n        \"OneYearContract\": \"C12\",\r\n        \"ThirdYearContract\": \"C13\",\r\n        \"FiveYearContract\": \"C14\",\r\n        \"Familia\": \"FortiGate VM\"\r\n    },\r\n    {\r\n        \"UNIT\": \"D1\",\r\n        \"SKU\": \"D2\",\r\n        \"Descripcion\": \"D3\",\r\n        \"Price\": \"D4\",\r\n        \"OneYearContract\": \"D5\",\r\n        \"ThirdYearContract\": \"D6\",\r\n        \"FiveYearContract\": \"D7\",\r\n        \"Familia\": \"Rugged Products\"\r\n    },\r\n    {\r\n        \"UNIT\": \"D8\",\r\n        \"SKU\": \"D9\",\r\n        \"Descripcion\": \"D10\",\r\n        \"Price\": \"D11\",\r\n        \"OneYearContract\": \"D12\",\r\n        \"ThirdYearContract\": \"D13\",\r\n        \"FiveYearContract\": \"D14\",\r\n        \"Familia\": \"Rugged Products\"\r\n    },\r\n    {\r\n        \"UNIT\": \"E1\",\r\n        \"SKU\": \"E2\",\r\n        \"Descripcion\": \"E3\",\r\n        \"Price\": \"E4\",\r\n        \"OneYearContract\": \"E5\",\r\n        \"ThirdYearContract\": \"E6\",\r\n        \"FiveYearContract\": \"E7\",\r\n        \"Familia\": \"VDOM & ADOM\"\r\n    },\r\n    {\r\n        \"UNIT\": \"E8\",\r\n        \"SKU\": \"E9\",\r\n        \"Descripcion\": \"E10\",\r\n        \"Price\": \"E11\",\r\n        \"OneYearContract\": \"E12\",\r\n        \"ThirdYearContract\": \"E13\",\r\n        \"FiveYearContract\": \"E14\",\r\n        \"Familia\": \"VDOM & ADOM\"\r\n    },\r\n    {\r\n        \"UNIT\": \"F1\",\r\n        \"SKU\": \"F2\",\r\n        \"Descripcion\": \"F3\",\r\n        \"Price\": \"F4\",\r\n        \"OneYearContract\": \"F5\",\r\n        \"ThirdYearContract\": \"F6\",\r\n        \"FiveYearContract\": \"F7\",\r\n        \"Familia\": \"FortiAnalyzer\"\r\n    },\r\n    {\r\n        \"UNIT\": \"F8\",\r\n        \"SKU\": \"F9\",\r\n        \"Descripcion\": \"F10\",\r\n        \"Price\": \"F11\",\r\n        \"OneYearContract\": \"F12\",\r\n        \"ThirdYearContract\": \"F13\",\r\n        \"FiveYearContract\": \"F14\",\r\n        \"Familia\": \"FortiAnalyzer\"\r\n    },\r\n    {\r\n        \"UNIT\": \"G1\",\r\n        \"SKU\": \"G2\",\r\n        \"Descripcion\": \"G3\",\r\n        \"Price\": \"G4\",\r\n        \"OneYearContract\": \"G5\",\r\n        \"ThirdYearContract\": \"G6\",\r\n        \"FiveYearContract\": \"G7\",\r\n        \"Familia\": \"FortiManager\"\r\n    },\r\n    {\r\n        \"UNIT\": \"G8\",\r\n        \"SKU\": \"G9\",\r\n        \"Descripcion\": \"G10\",\r\n        \"Price\": \"G11\",\r\n        \"OneYearContract\": \"G12\",\r\n        \"ThirdYearContract\": \"G13\",\r\n        \"FiveYearContract\": \"G14\",\r\n        \"Familia\": \"FortiManager\"\r\n    },\r\n    {\r\n        \"UNIT\": \"H1\",\r\n        \"SKU\": \"H2\",\r\n        \"Descripcion\": \"H3\",\r\n        \"Price\": \"H4\",\r\n        \"OneYearContract\": \"H5\",\r\n        \"ThirdYearContract\": \"H6\",\r\n        \"FiveYearContract\": \"H7\",\r\n        \"Familia\": \"FortiSwitch\"\r\n    },\r\n    {\r\n        \"UNIT\": \"H8\",\r\n        \"SKU\": \"H9\",\r\n        \"Descripcion\": \"H10\",\r\n        \"Price\": \"H11\",\r\n        \"OneYearContract\": \"H12\",\r\n        \"ThirdYearContract\": \"H13\",\r\n        \"FiveYearContract\": \"H14\",\r\n        \"Familia\": \"FortiSwitch\"\r\n    },\r\n    {\r\n        \"UNIT\": \"I1\",\r\n        \"SKU\": \"I2\",\r\n        \"Descripcion\": \"I3\",\r\n        \"Price\": \"I4\",\r\n        \"OneYearContract\": \"I5\",\r\n        \"ThirdYearContract\": \"I6\",\r\n        \"FiveYearContract\": \"I7\",\r\n        \"Familia\": \"Wireless Products\"\r\n    },\r\n    {\r\n        \"UNIT\": \"I8\",\r\n        \"SKU\": \"I9\",\r\n        \"Descripcion\": \"I10\",\r\n        \"Price\": \"I11\",\r\n        \"OneYearContract\": \"I12\",\r\n        \"ThirdYearContract\": \"I13\",\r\n        \"FiveYearContract\": \"I14\",\r\n        \"Familia\": \"Wireless Products\"\r\n    },\r\n    {\r\n        \"UNIT\": \"J1\",\r\n        \"SKU\": \"J2\",\r\n        \"Descripcion\": \"J3\",\r\n        \"Price\": \"J4\",\r\n        \"OneYearContract\": \"J5\",\r\n        \"ThirdYearContract\": \"J6\",\r\n        \"FiveYearContract\": \"J7\",\r\n        \"Familia\": \"FortiMail\"\r\n    },\r\n    {\r\n        \"UNIT\": \"J8\",\r\n        \"SKU\": \"J9\",\r\n        \"Descripcion\": \"J10\",\r\n        \"Price\": \"J11\",\r\n        \"OneYearContract\": \"J12\",\r\n        \"ThirdYearContract\": \"J13\",\r\n        \"FiveYearContract\": \"J14\",\r\n        \"Familia\": \"FortiMail\"\r\n    },\r\n    {\r\n        \"UNIT\": \"K1\",\r\n        \"SKU\": \"K2\",\r\n        \"Descripcion\": \"K3\",\r\n        \"Price\": \"K4\",\r\n        \"OneYearContract\": \"K5\",\r\n        \"ThirdYearContract\": \"K6\",\r\n        \"FiveYearContract\": \"K7\",\r\n        \"Familia\": \"FortiWeb\"\r\n    },\r\n    {\r\n        \"UNIT\": \"K8\",\r\n        \"SKU\": \"K9\",\r\n        \"Descripcion\": \"K10\",\r\n        \"Price\": \"K11\",\r\n        \"OneYearContract\": \"K12\",\r\n        \"ThirdYearContract\": \"K13\",\r\n        \"FiveYearContract\": \"K14\",\r\n        \"Familia\": \"FortiWeb\"\r\n    }\r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL}}/api/v1/product/insertar/masivo",
+          "host": [
+            "{{URL}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "product",
+            "insertar",
+            "masivo"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Ollama Test - Tags",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:11434/api/tags",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "11434",
+          "path": [
+            "api",
+            "tags"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Ollama Test - Generate",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"model\": \"phi3\",\r\n    \"prompt\": \"Cuanto es 2 mas 2 ? dime el resultado nada mas\",\r\n    \"stream\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:11434/api/generate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "11434",
+          "path": [
+            "api",
+            "generate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Agente - Ask",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n        {\r\n            \"role\": \"system\",\r\n            \"content\": \"Que se dice parcerito ??? todo bien \"\r\n        }\r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL}}/api/v1/agent/ask",
+          "host": [
+            "{{URL}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "agent",
+            "ask"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

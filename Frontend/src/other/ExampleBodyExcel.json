@@ -1,0 +1,222 @@
+[
+    {
+        "UNIT": "A1",
+        "SKU": "A2",
+        "Descripcion": "A3",
+        "Price": "A4",
+        "OneYearContract": "A5",
+        "ThirdYearContract": "A6",
+        "FiveYearContract": "A7",
+        "Familia": "FortiGate"
+    },
+    {
+        "UNIT": "A8",
+        "SKU": "A9",
+        "Descripcion": "A10",
+        "Price": "A11",
+        "OneYearContract": "A12",
+        "ThirdYearContract": "A13",
+        "FiveYearContract": "A14",
+        "Familia": "FortiGate"
+    },
+    {
+        "UNIT": "B1",
+        "SKU": "B2",
+        "Descripcion": "B3",
+        "Price": "B4",
+        "OneYearContract": "B5",
+        "ThirdYearContract": "B6",
+        "FiveYearContract": "B7",
+        "Familia": "FortiWiFi"
+    },
+    {
+        "UNIT": "B8",
+        "SKU": "B9",
+        "Descripcion": "B10",
+        "Price": "B11",
+        "OneYearContract": "B12",
+        "ThirdYearContract": "B13",
+        "FiveYearContract": "B14",
+        "Familia": "FortiWiFi"
+    },
+    {
+        "UNIT": "C1",
+        "SKU": "C2",
+        "Descripcion": "C3",
+        "Price": "C4",
+        "OneYearContract": "C5",
+        "ThirdYearContract": "C6",
+        "FiveYearContract": "C7",
+        "Familia": "FortiGate VM"
+    },
+    {
+        "UNIT": "C8",
+        "SKU": "C9",
+        "Descripcion": "C10",
+        "Price": "C11",
+        "OneYearContract": "C12",
+        "ThirdYearContract": "C13",
+        "FiveYearContract": "C14",
+        "Familia": "FortiGate VM"
+    },
+    {
+        "UNIT": "D1",
+        "SKU": "D2",
+        "Descripcion": "D3",
+        "Price": "D4",
+        "OneYearContract": "D5",
+        "ThirdYearContract": "D6",
+        "FiveYearContract": "D7",
+        "Familia": "Rugged Products"
+    },
+    {
+        "UNIT": "D8",
+        "SKU": "D9",
+        "Descripcion": "D10",
+        "Price": "D11",
+        "OneYearContract": "D12",
+        "ThirdYearContract": "D13",
+        "FiveYearContract": "D14",
+        "Familia": "Rugged Products"
+    },
+    {
+        "UNIT": "E1",
+        "SKU": "E2",
+        "Descripcion": "E3",
+        "Price": "E4",
+        "OneYearContract": "E5",
+        "ThirdYearContract": "E6",
+        "FiveYearContract": "E7",
+        "Familia": "VDOM & ADOM"
+    },
+    {
+        "UNIT": "E8",
+        "SKU": "E9",
+        "Descripcion": "E10",
+        "Price": "E11",
+        "OneYearContract": "E12",
+        "ThirdYearContract": "E13",
+        "FiveYearContract": "E14",
+        "Familia": "VDOM & ADOM"
+    },
+    {
+        "UNIT": "F1",
+        "SKU": "F2",
+        "Descripcion": "F3",
+        "Price": "F4",
+        "OneYearContract": "F5",
+        "ThirdYearContract": "F6",
+        "FiveYearContract": "F7",
+        "Familia": "FortiAnalyzer"
+    },
+    {
+        "UNIT": "F8",
+        "SKU": "F9",
+        "Descripcion": "F10",
+        "Price": "F11",
+        "OneYearContract": "F12",
+        "ThirdYearContract": "F13",
+        "FiveYearContract": "F14",
+        "Familia": "FortiAnalyzer"
+    },
+    {
+        "UNIT": "G1",
+        "SKU": "G2",
+        "Descripcion": "G3",
+        "Price": "G4",
+        "OneYearContract": "G5",
+        "ThirdYearContract": "G6",
+        "FiveYearContract": "G7",
+        "Familia": "FortiManager"
+    },
+    {
+        "UNIT": "G8",
+        "SKU": "G9",
+        "Descripcion": "G10",
+        "Price": "G11",
+        "OneYearContract": "G12",
+        "ThirdYearContract": "G13",
+        "FiveYearContract": "G14",
+        "Familia": "FortiManager"
+    },
+    {
+        "UNIT": "H1",
+        "SKU": "H2",
+        "Descripcion": "H3",
+        "Price": "H4",
+        "OneYearContract": "H5",
+        "ThirdYearContract": "H6",
+        "FiveYearContract": "H7",
+        "Familia": "FortiSwitch"
+    },
+    {
+        "UNIT": "H8",
+        "SKU": "H9",
+        "Descripcion": "H10",
+        "Price": "H11",
+        "OneYearContract": "H12",
+        "ThirdYearContract": "H13",
+        "FiveYearContract": "H14",
+        "Familia": "FortiSwitch"
+    },
+    {
+        "UNIT": "I1",
+        "SKU": "I2",
+        "Descripcion": "I3",
+        "Price": "I4",
+        "OneYearContract": "I5",
+        "ThirdYearContract": "I6",
+        "FiveYearContract": "I7",
+        "Familia": "Wireless Products"
+    },
+    {
+        "UNIT": "I8",
+        "SKU": "I9",
+        "Descripcion": "I10",
+        "Price": "I11",
+        "OneYearContract": "I12",
+        "ThirdYearContract": "I13",
+        "FiveYearContract": "I14",
+        "Familia": "Wireless Products"
+    },
+    {
+        "UNIT": "J1",
+        "SKU": "J2",
+        "Descripcion": "J3",
+        "Price": "J4",
+        "OneYearContract": "J5",
+        "ThirdYearContract": "J6",
+        "FiveYearContract": "J7",
+        "Familia": "FortiMail"
+    },
+    {
+        "UNIT": "J8",
+        "SKU": "J9",
+        "Descripcion": "J10",
+        "Price": "J11",
+        "OneYearContract": "J12",
+        "ThirdYearContract": "J13",
+        "FiveYearContract": "J14",
+        "Familia": "FortiMail"
+    },
+    {
+        "UNIT": "K1",
+        "SKU": "K2",
+        "Descripcion": "K3",
+        "Price": "K4",
+        "OneYearContract": "K5",
+        "ThirdYearContract": "K6",
+        "FiveYearContract": "K7",
+        "Familia": "FortiWeb"
+    },
+    {
+        "UNIT": "K8",
+        "SKU": "K9",
+        "Descripcion": "K10",
+        "Price": "K11",
+        "OneYearContract": "K12",
+        "ThirdYearContract": "K13",
+        "FiveYearContract": "K14",
+        "Familia": "FortiWeb"
+    }
+]

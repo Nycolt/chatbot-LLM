@@ -1,0 +1,18 @@
+{
+  "name": "chat_faq_llm",
+  "type": "module",
+  "version": "1.0.0",
+  "description": " Chat para productos fortinet con LLM ",
+  "scripts": {
+    "run:docker": "cd ./Base de datos (Docker) && docker-compose up && cd ..",
+    "run:server": "cd Backend && pnpm install && pnpm run dev cd ..",
+    "start:dev": "\"pnpm run run:server\"",
+    "config:model": "cd func/Ollama_local && node index.js",
+    "stop:docker": "cd ./Base de datos (Docker) && docker-compose down && cd ..",
+    "delete:images": "docker image rm phpmyadmin:latest ollama/ollama:0.14.0-rc9 mysql:8.0",
+    "delete:ollama": "docker image rm ollama/ollama:0.14.0-rc9",
+    "delete:containers": "docker container prune"
+  },
+  "keywords": [],
+  "license": "ISC"
+}
