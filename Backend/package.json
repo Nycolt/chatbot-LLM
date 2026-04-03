@@ -5,7 +5,16 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "migrate:fortigate-specs": "node scripts/migrateFortigateFromDatasheet.mjs",
+    "migrate:fortiwifi-specs-matrix": "node scripts/applyFortiwifiSpecsMatrix.mjs",
+    "migrate:fortianalyzer-specs-matrix": "node scripts/applyFortianalyzerSpecsMatrix.mjs",
+    "migrate:fortimanager-specs-pdf": "node scripts/applyFortimanagerSpecsPdfColumns.mjs",
+    "fix:fortimanager-specs-fk": "node scripts/fixFortimanagerSpecsForeignKey.mjs",
+    "migrate:fortimanager-specs-unit": "node scripts/applyFortimanagerSpecsUnitColumn.mjs",
+    "migrate:fortimanager-specs-sizing-names": "node scripts/applyFortimanagerSpecsSizingColumnNames.mjs",
+    "seed:offer-compatibility-rules": "node scripts/seedOfferCompatibilityRules.mjs",
+    "load:fortimanager-pdf": "node scripts/fortimanager.loadFromPdf.js"
   },
   "keywords": [],
   "author": "Nycolt",
@@ -20,11 +29,14 @@
     "express-winston": "^4.2.0",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
     "mysql2": "^3.16.0",
     "ollama": "^0.6.3",
     "openai": "^4.75.0",
+    "pdf-parse": "^1.1.1",
     "sequelize": "^6.37.7",
-    "winston": "^3.19.0"
+    "winston": "^3.19.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

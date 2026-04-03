@@ -1,8 +1,9 @@
 //Componentes y funciones
 import { settingsBtn } from "./ComponentesFormulario.js";
-import { CargarProducto, handleCerrarSesion, CargarDatasheet } from "./MenuActions.fun.js";
+import { handleCerrarSesion, CargarDatasheetPdf, CargarPriceListFortinet } from "./MenuActions.fun.js";
 import { ModalAutenticacion } from "../modal/ModalAutenticacion.js";
 import { setTokenAuth } from "../config/fetch.js";
+import { openBuzonNecesidades } from "./BuzonNecesidades.js";
 import {
     createMenuConfiguracion,
     closeMenuConfiguracion,
@@ -18,25 +19,37 @@ import AuthService from "../services/AuthService.js";
  */
 const OptionsMenu = [
     {
-        label: "Cargar Productos",
+        label: "Cargar datasheet PDF",
         icon: `
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
             </svg>
         `,
         action: () => {
-            CargarProducto();
+            CargarDatasheetPdf();
         },
     },
     {
-        label: "Cargar Datasheets",
+        label: "Cargar Price List Fortinet",
         icon: `
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         `,
         action: () => {
-            CargarDatasheet(); // Implementar función de cargar datasheets
+            CargarPriceListFortinet();
+        },
+    },
+    {
+        label: "Buzón de Necesidades",
+        icon: `
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+            </svg>
+        `,
+        action: () => {
+            openBuzonNecesidades();
         },
     },
     {

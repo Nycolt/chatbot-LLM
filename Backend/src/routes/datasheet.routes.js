@@ -6,6 +6,8 @@ import express from 'express';
 //import { body } from 'express-validator';
 
 import { insertarDatasheets } from '../controllers/datasheet.controller.js';
+import { uploadDatasheetPdf } from '../controllers/datasheetPdf.controller.js';
+import { uploadDatasheetPdfMiddleware } from '../middlewares/datasheetPdfUpload.middleware.js';
 
 import { protect } from '../middlewares/auth.js';
 //import validate from '../middlewares/validate.js';
@@ -32,5 +34,12 @@ router.post(
     insertarDatasheets   // Controlador para manejar la inserción de datasheets
 );
 
+/** PDF oficial / matrix → datasheet_sources + product_models + *_specs */
+router.post(
+  '/pdf/upload',
+  protect,
+  uploadDatasheetPdfMiddleware,
+  uploadDatasheetPdf,
+);
 
 export default router;

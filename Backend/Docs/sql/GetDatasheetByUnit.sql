@@ -61,7 +61,7 @@ BEGIN
             d.createdAt,
             d.updatedAt,
             COUNT(*) OVER() AS total_variants
-        FROM Datasheet d
+        FROM fortigate_specs d
         WHERE d.UNIT = p_unit
         ORDER BY d.SKU;
         

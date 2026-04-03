@@ -8,6 +8,7 @@ import config from './src/config/env.js';
 import connectDB from './src/config/database.js';
 import { logger } from './src/config/logger.js';
 import syncDatabase from './src/utils/database.utils.js';
+import { refreshLearnedKeywordsCache } from './src/services/learnedSolutionKeywords.service.js';
 
 const PORT = config.port;
 
@@ -21,6 +22,8 @@ const startServer = async () => {
     if (config.nodeEnv === 'development') {
       await syncDatabase({ alter: false, force: false });
     }
+
+    await refreshLearnedKeywordsCache();
 
     //Pre calentar LLMs u otros servicios si es necesario
     // await prewarmServices();

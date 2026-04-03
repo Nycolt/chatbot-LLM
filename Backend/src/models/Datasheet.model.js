@@ -1,5 +1,7 @@
 /**
- * Modelo de Usuario usando Sequelize para MySQL
+ * `Datasheet`: filas no FortiGate (otras soluciones / compatibilidad de carga masiva).
+ * FortiGate vive en `fortigate_specs` (`FortigateSpecs.model.js`, mismo esquema PascalCase).
+ * Trazabilidad PDF/matrix: `datasheet_sources` + `datasheet_model_map`.
  */
 
 import { DataTypes } from 'sequelize';
@@ -145,11 +147,4 @@ const Datasheet = sequelize.define('Datasheet', {
     timestamps: true,
 });
 
-const DatasheetTemp = sequelize.define('DatasheetTemporal', {
-    ...properties
-}, {
-    tableName: 'DatasheetTemporal',
-    timestamps: true,
-});
-
-export { DatasheetTemp, Datasheet };
+export { Datasheet };

@@ -10,6 +10,144 @@
     background-image: url("../img/wexler.png");
 }
 #logo-fortinet {
-    transform: scale(2);
     background-image: url("../img/fortinet.png");
+}
+
+/* Menú de inicio (mensaje de bienvenida) */
+.menu-inicio {
+    font-size: 0.95rem;
+    line-height: 1.45;
+}
+.menu-inicio-saludo {
+    margin: 0 0 0.35rem 0;
+    font-weight: 700;
+    font-size: 1.02rem;
+    letter-spacing: 0.01em;
+    color: #f9fafb;
+}
+.menu-inicio-instruction {
+    margin: 0;
+    color: #9ca3af;
+    font-size: 0.88rem;
+}
+.menu-opciones {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin: 0.65rem 0;
+}
+.menu-opcion {
+    display: block;
+    background: linear-gradient(145deg, rgba(227, 27, 35, 0.12) 0%, rgba(17, 24, 39, 0.65) 100%);
+    border: 1px solid rgba(227, 27, 35, 0.35);
+    border-radius: 12px;
+    padding: 0.65rem 0.85rem;
+    color: #e5e7eb;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    cursor: default;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, background 0.25s ease;
+}
+.menu-opcion:hover {
+    border-color: rgba(227, 27, 35, 0.65);
+    box-shadow: 0 8px 24px rgba(227, 27, 35, 0.22), 0 0 28px rgba(227, 27, 35, 0.14);
+    transform: translateY(-2px);
+    background: linear-gradient(145deg, rgba(227, 27, 35, 0.2) 0%, rgba(22, 31, 51, 0.85) 100%);
+}
+.menu-opcion-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.45rem;
+    height: 1.45rem;
+    margin-right: 0.5rem;
+    background: linear-gradient(180deg, #e31b23 0%, #7a0f14 100%);
+    color: white;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.78rem;
+    box-shadow: 0 2px 8px rgba(227, 27, 35, 0.35);
+}
+.menu-inicio-pie {
+    margin: 0.4rem 0 0 0;
+    padding-top: 0.35rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    color: #9ca3af;
+    font-size: 0.88rem;
+}
+
+/* Pie de mensajes del agente: "¿Volver al menú?" */
+.chat-bubble-agent .chat-bubble-menu-footer {
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+.chat-bubble-menu-link {
+    background: none;
+    border: none;
+    color: #f87171;
+    cursor: pointer;
+    font-size: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    padding: 0 0.15rem;
+    margin-left: 0.15rem;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+.chat-bubble-menu-link:hover {
+    color: #fca5a5;
+    transform: translateY(-1px);
+}
+
+/* Submenú de soluciones a dimensionar (mismo ritmo visual / hover que Menú principal) */
+.menu-dimension-lead {
+    margin: 0 0 0.5rem 0;
+    line-height: 1.5;
+}
+.menu-dimension-intro {
+    margin: 0 0 0.5rem 0;
+    color: #d1d5db;
+    font-size: 0.9rem;
+}
+.menu-dimension-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    margin: 0.55rem 0 0.65rem 0;
+}
+.menu-dimension-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.5rem;
+    border-radius: 10px;
+    border: 1px solid rgba(227, 27, 35, 0.22);
+    background: rgba(17, 24, 39, 0.45);
+    color: #e5e7eb;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    cursor: default;
+    transition: color 0.25s ease, transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+.menu-dimension-item:hover {
+    transform: translateY(-1px);
+    border-color: rgba(248, 113, 113, 0.45);
+    background: rgba(30, 41, 59, 0.65);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+.menu-dimension-item:hover .menu-dimension-text {
+    color: #fca5a5;
+}
+.menu-dimension-text {
+    transition: color 0.25s ease;
+}
+.menu-dimension-item .menu-dimension-num {
+    flex-shrink: 0;
+}
+.menu-dimension-prompt {
+    margin: 0.35rem 0 0 0;
+    line-height: 1.45;
 }

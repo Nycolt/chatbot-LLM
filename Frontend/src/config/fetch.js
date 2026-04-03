@@ -1,5 +1,5 @@
-import { getGlobalVariable, localStorageKeys } from './variables.js';
-import {setTokenStorage} from './localStorage.js';
+import { getGlobalVariable, getResolvedApiBase, localStorageKeys } from './variables.js';
+import { setTokenStorage, getTokenStorage } from './localStorage.js';
 
 /**
  * Configuración base para fetch
@@ -11,7 +11,7 @@ const TIMEOUT = 3600000;
  * @returns {string}
  */
 const getBaseUrl = () => {
-    return getGlobalVariable('apiUrl') || 'http://localhost:3000/api/v1';
+    return getGlobalVariable('apiUrl') || getResolvedApiBase();
 };
 
 let authToken = null;
@@ -37,8 +37,9 @@ const getHeaders = (additionalHeaders = {}) => {
         ...additionalHeaders
     };
 
-    if (authToken) {
-        headers.Authorization = `Bearer ${authToken}`;
+    const token = authToken || getTokenStorage(localStorageKeys.tokenAuth);
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
     }
 
     return headers;

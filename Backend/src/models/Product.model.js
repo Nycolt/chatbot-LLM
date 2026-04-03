@@ -1,5 +1,9 @@
 /**
- * Modelo de Usuario usando Sequelize para MySQL
+ * Catálogo comercial por línea de lista de precios (tabla `Producto`).
+ *
+ * - Hay **varias filas por mismo UNIT** (SKUs, bundles, servicios): no es el maestro 1-fila/modelo.
+ * - Carga típica: Excel → `ProductoTemporal` → SP `DebbugProductos` → esta tabla.
+ * - Para **un modelo lógico por fila** usar `product_models` (unit + solution_id en ProductModel.model.js).
  */
 
 import { DataTypes } from 'sequelize';

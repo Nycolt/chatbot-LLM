@@ -1,66 +1,134 @@
-import { Datasheet, DatasheetTemp } from '../models/Datasheet.model.js';
-import { bulkCreate, bulkCreateInChunks } from '../utils/bulk.utils.js';
+import { sequelize } from '../config/database.js';
+import { logger } from '../config/logger.js';
+import { Datasheet } from '../models/Datasheet.model.js';
+import FortigateSpecs from '../models/FortigateSpecs.model.js';
+import Solution from '../models/Solution.model.js';
 import TransactSQL from './TransactSQL.js';
-
+import { bulkCreate, bulkCreateInChunks } from '../utils/bulk.utils.js';
+import {
+  upsertSpecs,
+  dedupeRecordsByUnit,
+  findDuplicateSpecUnits,
+} from '../utils/specUpsert.utils.js';
+import { isFortigateUnitOrSkuRow } from './fortigate/fortigateSpecRowMap.js';
+import { getDatasheetRowsByUnitPreferCatalog } from './fortigate/fortigateSpecsSizing.service.js';
 
 class DatasheetService {
-
   /**
-   * Crear múltiples productos de forma masiva
-   * @param {Array} productos - Array de objetos de producto
-   * @param {object} options - Opciones adicionales
-   * @returns {Promise<Array>} - Productos creados
+   * Carga masiva desde Excel/API.
+   * - Filas FortiGate → tabla `fortigate_specs` (mismo esquema que la antigua `Datasheet`).
+   * - Resto → tabla `Datasheet`.
    */
   async bulkCreateDatasheets(datasheets, options = {}) {
-
     const { useChunks = false, chunkSize = 500 } = options;
-    
-    if (useChunks && datasheets.length > chunkSize) {
-      // Usar chunks para grandes volúmenes
-      return await bulkCreateInChunks(DatasheetTemp, datasheets, chunkSize);
-    } else {
-      // Inserción masiva directa
-      return await bulkCreate(DatasheetTemp, datasheets, {
-        validate: true
-      });
+
+    if (!Array.isArray(datasheets) || datasheets.length === 0) {
+      return [];
     }
 
+    const fortigateSolution = await Solution.findOne({
+      where: { code: 'fortigate', is_active: 1 },
+    });
+
+    const fgRows = datasheets.filter(isFortigateUnitOrSkuRow);
+    const otherRows = datasheets.filter(r => !isFortigateUnitOrSkuRow(r));
+
+    // Sin solución fortigate en BD: todo va a Datasheet (no perder carga)
+    if (!fortigateSolution) {
+      const merged = [...datasheets];
+      if (useChunks && merged.length > chunkSize) {
+        return bulkCreateInChunks(Datasheet, merged, chunkSize);
+      }
+      return bulkCreate(Datasheet, merged, { validate: true });
+    }
+
+    const out = [];
+
+    await sequelize.transaction(async (transaction) => {
+      if (fgRows.length) {
+        const deduped = dedupeRecordsByUnit(fgRows, 'UNIT');
+        if (useChunks && deduped.length > chunkSize) {
+          for (let i = 0; i < deduped.length; i += chunkSize) {
+            const chunk = deduped.slice(i, i + chunkSize);
+            const saved = await upsertSpecs(FortigateSpecs, chunk, {
+              transaction,
+              unitField: 'UNIT',
+            });
+            out.push(...saved);
+          }
+        } else {
+          const saved = await upsertSpecs(FortigateSpecs, deduped, {
+            transaction,
+            unitField: 'UNIT',
+          });
+          out.push(...saved);
+        }
+      }
+
+      if (otherRows.length) {
+        if (useChunks && otherRows.length > chunkSize) {
+          for (let i = 0; i < otherRows.length; i += chunkSize) {
+            const chunk = otherRows.slice(i, i + chunkSize);
+            const created = await bulkCreate(Datasheet, chunk, { validate: true, transaction });
+            out.push(...created);
+          }
+        } else {
+          const created = await bulkCreate(Datasheet, otherRows, { validate: true, transaction });
+          out.push(...created);
+        }
+      }
+    });
+
+    if (fgRows.length) {
+      try {
+        const dups = await findDuplicateSpecUnits(FortigateSpecs, 'UNIT');
+        if (dups.length) {
+          logger.warn(
+            { duplicates: dups },
+            '[Datasheet] fortigate_specs: se detectaron UNIT duplicados tras la carga (revisar índice único y datos)',
+          );
+        }
+      } catch (e) {
+        logger.debug({ err: e?.message }, '[Datasheet] validación duplicados omitida');
+      }
+    }
+
+    return out;
   }
 
   /**
-   * Sincronizar productos desde DatasheetTemp a Datasheet
-   * Usa el SP DebbugDatasheets para:
-   * 1. Insertar nuevas datasheets
-   * 2. Actualizar datasheets existentes
-   * 3. Limpiar tabla temporal
-   * @returns {Promise<object>} - Resultado de la operación
+   * Antes ejecutaba SP `DebbugDatasheets` sobre `DatasheetTemporal`. Obsoleto.
    */
   async syncDatasheetsFromTemp() {
-    return await TransactSQL.singleQuery('DebbugDatasheets');
+    return {
+      message:
+        'Omitido: la carga masiva escribe en fortigate_specs (FortiGate) y Datasheet (resto).',
+      inserted: 0,
+      updated: 0,
+      deleted: 0,
+    };
   }
 
-  /**
-   * Obtener datasheets de un producto por su UNIT
-   * Retorna todas las variantes/SKUs de un producto base
-   * @param {string} unit - UNIT del producto (ej: 'FG-60F', 'FG-100F')
-   * @returns {Promise<Array>} - Array de datasheets del producto
-   */
   async getDatasheetByUnit(unit) {
     if (!unit || typeof unit !== 'string' || unit.trim() === '') {
       throw new Error('El parámetro UNIT es requerido y debe ser una cadena válida');
     }
 
-    const result = await TransactSQL.singleQuery('GetDatasheetByUnit', [unit.trim()]);
-    
-    // El SP retorna un array de resultados
-    // Si está vacío, significa que no se encontró el producto
-    if (!result || result.length === 0) {
-      return [];
-    }
+    const trimmed = unit.trim();
 
-    return result;
+    return getDatasheetRowsByUnitPreferCatalog(trimmed, async () => {
+      const result = await TransactSQL.singleQuery('GetDatasheetByUnit', [trimmed]);
+      return result || [];
+    });
   }
-  
+
+  async getAllDatasheets() {
+    const [fg, legacy] = await Promise.all([
+      FortigateSpecs.findAll({ raw: true }),
+      Datasheet.findAll({ raw: true }),
+    ]);
+    return [...(fg || []), ...(legacy || [])];
+  }
 }
 
 export default new DatasheetService();

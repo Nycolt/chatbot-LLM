@@ -75,7 +75,9 @@ export const ModalCargaDocumentos = (
                 }
 
                 // Verificar si es modo Excel o modo genérico
-                const isExcelMode = optionsInput.accept && /xlsx|xls|csv/i.test(optionsInput.accept);
+                // Nota: permitimos forzar "modo genérico" (para subir el archivo crudo) con optionsInput.parseExcel=false
+                const shouldParseExcel = optionsInput?.parseExcel !== false;
+                const isExcelMode = shouldParseExcel && optionsInput.accept && /xlsx|xls|csv/i.test(optionsInput.accept);
 
                 if (isExcelMode) {
                     // Validar extensión para Excel

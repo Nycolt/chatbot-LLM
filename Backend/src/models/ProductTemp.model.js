@@ -1,5 +1,6 @@
 /**
- * Modelo de Usuario usando Sequelize para MySQL
+ * Staging masivo antes de sincronizar a `Producto` (SP `DebbugProductos`).
+ * **En uso** desde `priceListUpload.service` y `product.controller` — no eliminar sin sustituir el flujo.
  */
 
 import { DataTypes } from 'sequelize';

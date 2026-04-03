@@ -1,10 +1,17 @@
 
 //Complementos, funciones, utilidades .etc 
-import { initVariales,  } from "./src/config/variables.js";
+import { initVariales } from "./src/config/variables.js";
 import { initSweetAlert } from "./src/config/sweetalert.js";
 import { configPopUpButton } from "./src/components/MenuActions.js";
 import AgentService from "./src/services/AgentService.js";
-import { showLoadingIndicator, hideLoadingIndicator, renderMessages } from "./src/components/ComponentesFormulario.js";
+import { WELCOME_MESSAGE } from "./src/services/AgentService.js";
+import {
+    showLoadingIndicator,
+    hideLoadingIndicator,
+    renderMessages,
+    chatbox,
+} from "./src/components/ComponentesFormulario.js";
+import { ensureComparePickerDelegation } from "./src/components/CompareModelPicker.js";
 
 /**
  * Mostrar alerta informativa sobre precisión de la IA
@@ -67,23 +74,17 @@ const configButtons = () => {
  * Inicializar el chat del agente
  */
 const initAgentChat = async () => {
-    try {
-        // Mostrar indicador de carga
-        showLoadingIndicator();
-
-        // Configurar el chat del agente
-        const messages = await AgentService.configChat();
-
-        // Ocultar indicador de carga
-        hideLoadingIndicator();
-
-        // Renderizar mensajes iniciales
-        renderMessages(messages);
-    } catch (error) {
-        console.error("Error al inicializar el chat:", error);
-        hideLoadingIndicator();
-    }
-}
+  try {
+    // Alinear estado interno con lo que se muestra (menú principal + “Menú principal” / flujos)
+    AgentService.uiState = "idle";
+    AgentService.compareSolution = null;
+    AgentService.setMessages([WELCOME_MESSAGE]);
+    renderMessages(AgentService.getMessages());
+    ensureComparePickerDelegation(chatbox);
+  } catch (error) {
+    console.error("Error al inicializar el chat:", error);
+  }
+};
 
 /***
  * Configuración inicial de la aplicación
@@ -97,12 +98,12 @@ const ConfiguracionInicial = () => {
     initSweetAlert();
 
     //Inicializar el servicio del agente
-    AgentService.run();
+    //AgentService.run();
 
     // Configuracion de acciones de botones
     configButtons();
 
-    // Inicializar el chat del agente
+    // Inicializar el chat del agente (delegación de botones comparación se registra dentro)
     initAgentChat();
 
     // Mostrar alerta informativa sobre la IA

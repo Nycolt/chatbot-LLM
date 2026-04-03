@@ -1,0 +1,425 @@
+/**
+ * Tema visual SaaS — Fortinet / dark (solo presentación).
+ * Carga después de Tailwind para poder sobrescribir utilidades.
+ */
+
+:root {
+  --fn-red: #e31b23;
+  --fn-red-dark: #7a0f14;
+  --fn-red-glow: rgba(227, 27, 35, 0.45);
+  --fn-bg-deep: #0b0f1a;
+  --fn-bg-panel: #111827;
+  --fn-bg-elevated: #161f33;
+  --fn-border: rgba(227, 27, 35, 0.22);
+  --fn-text: #e5e7eb;
+  --fn-text-muted: #9ca3af;
+  --fn-radius-lg: 20px;
+  --fn-radius-xl: 26px;
+  --fn-shadow: 0 24px 48px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(227, 27, 35, 0.12);
+  --fn-transition: 0.25s ease;
+}
+
+/* Evita recortes raros del viewport; altura mínima para cubrir el degradado */
+html {
+  overflow-x: hidden;
+  min-height: 100%;
+}
+
+/* Espacio alrededor de la card: sensación de flotar en el centro */
+.fortinet-app-shell {
+  padding: clamp(1rem, 4vh, 2rem) clamp(0.75rem, 3vw, 1.5rem) !important;
+  box-sizing: border-box;
+}
+
+/* Fondo: halos + degradado rojo + velo (orden = capas superiores primero) */
+.fورتinet-app-body,
+.fortinet-app-body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 60, 60, 0.18), transparent 32%),
+    radial-gradient(circle at 80% 28%, rgba(255, 20, 20, 0.12), transparent 30%),
+    radial-gradient(circle at 50% 92%, rgba(160, 20, 30, 0.1), transparent 38%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0.58) 100%),
+    linear-gradient(135deg, #180003 0%, #5c0a12 40%, #8e1018 72%, #19040a 100%) !important;
+  background-color: #180003;
+  background-attachment: fixed;
+  color: var(--fn-text);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+@keyframes fortinet-card-float-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fortinet-chat-card {
+    animation: none;
+  }
+}
+
+/* Tarjeta del chat: glass sutil, sombra profunda, borde premium — protagonista sobre el fondo */
+.fortinet-chat-card {
+  max-width: 42rem !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  background: rgba(10, 15, 26, 0.92) !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(227, 27, 35, 0.18),
+    0 12px 40px rgba(0, 0, 0, 0.35) !important;
+  border-radius: var(--fn-radius-xl) !important;
+  height: min(82vh, calc(100dvh - clamp(2.5rem, 8vh, 5rem))) !important;
+  max-height: min(900px, calc(100dvh - clamp(2.5rem, 8vh, 5rem))) !important;
+  animation: fortinet-card-float-in 0.65s ease-out both;
+}
+
+@media (max-width: 640px) {
+  .fortinet-chat-card {
+    height: min(88vh, calc(100dvh - clamp(2rem, 6vh, 3.5rem))) !important;
+    border-radius: var(--fn-radius-lg) !important;
+  }
+
+  .fortinet-app-shell {
+    padding: clamp(0.75rem, 3vh, 1.25rem) clamp(0.5rem, 2.5vw, 1rem) !important;
+  }
+}
+
+/* Header: barra superior compacta tipo SaaS */
+.fortinet-chat-header {
+  display: flex !important;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: clamp(1.25rem, 2.5vw, 1.875rem);
+  padding: 0.45rem clamp(0.75rem, 2vw, 1.15rem) !important;
+  min-height: 0;
+  box-sizing: border-box;
+  background: linear-gradient(92deg, #1c2538 0%, #151d2e 45%, #0f1624 100%) !important;
+  border-bottom: 1px solid rgba(227, 27, 35, 0.16) !important;
+  border-radius: var(--fn-radius-xl) var(--fn-radius-xl) 0 0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.fortinet-chat-header .fortinet-chat-title {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+}
+
+/* Tarjetas logo en header: misma caja para Fortinet y Wexler */
+.fortinet-chat-header .fortinet-logo-badge {
+  width: 7.25rem;
+  min-width: 7.25rem;
+  max-width: 7.25rem;
+  height: 4.375rem;
+  min-height: 4.375rem;
+  max-height: 4.375rem;
+}
+
+.fortinet-logo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #ffffff, #f1f1f1);
+  border: 1px solid rgba(15, 23, 42, 0.07);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  flex-shrink: 0;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.fortinet-logo-badge:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(145deg, #ffffff, #e8e8e8);
+  border-color: rgba(227, 27, 35, 0.12);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+}
+
+/* Base común: solo contiene el arte; alturas por logo para equilibrio visual */
+.fortinet-chat-header .fortinet-logo-img.contenedor_imagen_header {
+  display: block;
+  width: auto !important;
+  min-width: 0 !important;
+  background-size: contain !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  flex-shrink: 0;
+  filter: none !important;
+}
+
+/* Fortinet: mayor altura (55–65px), mismo padding de tarjeta; width auto vía ratio */
+#logo-fortinet.fortinet-logo-img.contenedor_imagen_header {
+  height: clamp(55px, 6vw, 65px) !important;
+  max-height: 65px !important;
+  aspect-ratio: 3.1 / 1;
+  max-width: min(230px, 52vw);
+}
+
+/* Wexler: escalado para peso visual similar al wordmark Fortinet */
+#logo-wexler.fortinet-logo-img.contenedor_imagen_header {
+  height: clamp(48px, 5.2vw, 58px) !important;
+  max-height: 58px !important;
+  aspect-ratio: 1.05 / 1;
+  max-width: min(92px, 24vw);
+}
+
+.fortinet-chat-heading {
+  font-size: clamp(1.2rem, 3.1vw, 1.55rem) !important;
+  line-height: 1.18 !important;
+  letter-spacing: -0.02em;
+  font-weight: 700 !important;
+  margin: 0;
+}
+
+@media (min-width: 480px) {
+  .fortinet-chat-heading {
+    white-space: nowrap;
+  }
+}
+
+.fortinet-chat-header .text-red-600,
+.fortinet-chat-header .text-red-700 {
+  color: var(--fn-red) !important;
+}
+
+@media (max-width: 479px) {
+  .fortinet-chat-header {
+    padding: 0.4rem 0.5rem !important;
+    gap: clamp(0.75rem, 3vw, 1.25rem);
+  }
+
+  .fortinet-chat-header .fortinet-logo-badge {
+    width: 6.25rem;
+    min-width: 6.25rem;
+    max-width: 6.25rem;
+    height: 3.75rem;
+    min-height: 3.75rem;
+    max-height: 3.75rem;
+  }
+
+  .fortinet-logo-badge {
+    padding: 5px 8px;
+    border-radius: 10px;
+  }
+
+  .fortinet-chat-heading {
+    font-size: clamp(1rem, 3.8vw, 1.15rem) !important;
+    line-height: 1.22 !important;
+  }
+
+  .fortinet-chat-header .fortinet-chat-title {
+    padding: 0 0.2rem;
+  }
+}
+
+/* Bienvenida estática: coherente con burbujas agente */
+#chatbox .fortinet-welcome-bubble {
+  border-radius: 1.15rem 1.15rem 1.15rem 0.35rem !important;
+}
+
+/* Área de mensajes: tono más profundo y distinto al header */
+#chatbox.fortinet-chatbox {
+  background: linear-gradient(180deg, #04060d 0%, #080c16 35%, #0a0f1a 100%) !important;
+  padding: 1rem 1.1rem 1.25rem !important;
+  scroll-behavior: smooth;
+  border-top: 1px solid rgba(0, 0, 0, 0.35);
+}
+
+#chatbox.fortinet-chatbox > div {
+  margin-bottom: 0.85rem !important;
+  animation: fortinet-msg-in 0.35s ease forwards;
+}
+
+@keyframes fortinet-msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Entrada escalonada del submenú de dimensionamiento (misma curva que fortinet-msg-in / enlace) */
+#chatbox.fortinet-chatbox .chat-bubble-agent .menu-dimension-item {
+  opacity: 0;
+  animation: fortinet-msg-in 0.35s ease forwards;
+}
+#chatbox.fortinet-chatbox .chat-bubble-agent .menu-dimension-item:nth-child(1) {
+  animation-delay: 0.05s;
+}
+#chatbox.fortinet-chatbox .chat-bubble-agent .menu-dimension-item:nth-child(2) {
+  animation-delay: 0.1s;
+}
+#chatbox.fortinet-chatbox .chat-bubble-agent .menu-dimension-item:nth-child(3) {
+  animation-delay: 0.15s;
+}
+#chatbox.fortinet-chatbox .chat-bubble-agent .menu-dimension-item:nth-child(4) {
+  animation-delay: 0.2s;
+}
+#chatbox.fortinet-chatbox .chat-bubble-agent .menu-dimension-item:nth-child(5) {
+  animation-delay: 0.25s;
+}
+#chatbox.fortinet-chatbox .chat-bubble-agent .menu-dimension-item:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #chatbox.fortinet-chatbox .chat-bubble-agent .menu-dimension-item {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Scrollbar */
+#chatbox.fortinet-chatbox::-webkit-scrollbar {
+  width: 7px;
+}
+#chatbox.fortinet-chatbox::-webkit-scrollbar-track {
+  background: rgba(17, 24, 39, 0.6);
+  border-radius: 10px;
+}
+#chatbox.fortinet-chatbox::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--fn-red) 0%, var(--fn-red-dark) 100%);
+  border-radius: 10px;
+}
+#chatbox.fortinet-chatbox {
+  scrollbar-width: thin;
+  scrollbar-color: var(--fn-red-dark) rgba(17, 24, 39, 0.6);
+}
+
+/* Burbujas — usuario (derecha) */
+#chatbox .text-right .inline-block {
+  background: linear-gradient(135deg, #c41e26 0%, var(--fn-red) 55%, #9f151c 100%) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 1.15rem 1.15rem 0.35rem 1.15rem !important;
+  box-shadow: 0 4px 16px rgba(227, 27, 35, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  padding: 0.65rem 1rem !important;
+  font-size: 0.925rem !important;
+  line-height: 1.5 !important;
+  max-width: 88% !important;
+  transition: box-shadow var(--fn-transition), transform var(--fn-transition);
+}
+
+#chatbox .text-right .inline-block:hover {
+  box-shadow: 0 6px 22px rgba(227, 27, 35, 0.35);
+}
+
+/* Burbujas — agente (izquierda) */
+#chatbox .text-left .inline-block.chat-bubble-agent,
+#chatbox .text-left > .inline-block {
+  background: linear-gradient(165deg, var(--fn-bg-elevated) 0%, #121826 100%) !important;
+  color: var(--fn-text) !important;
+  border: 1px solid rgba(227, 27, 35, 0.2) !important;
+  border-radius: 1.15rem 1.15rem 1.15rem 0.35rem !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.03) !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.925rem !important;
+  line-height: 1.55 !important;
+  max-width: 92% !important;
+}
+
+/* Formulario envío */
+.fortinet-chat-form {
+  background: linear-gradient(0deg, rgba(5, 8, 16, 0.95) 0%, rgba(17, 24, 39, 0.92) 100%) !important;
+  border-top: 1px solid rgba(227, 27, 35, 0.2) !important;
+  padding: 0.85rem 1rem 1rem !important;
+  gap: 0.65rem !important;
+  align-items: stretch !important;
+  border-radius: 0 0 var(--fn-radius-xl) var(--fn-radius-xl) !important;
+}
+
+.fortinet-chat-input {
+  background: rgba(17, 24, 39, 0.95) !important;
+  color: var(--fn-text) !important;
+  border: 1px solid rgba(227, 27, 35, 0.2) !important;
+  border-radius: 9999px !important;
+  padding: 0.65rem 1.15rem !important;
+  font-size: 0.95rem !important;
+  min-height: 2.75rem !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.fortinet-chat-input::placeholder {
+  color: var(--fn-text-muted) !important;
+  opacity: 0.95;
+}
+
+.fortinet-chat-input:focus {
+  border-color: var(--fn-red) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px var(--fn-red-glow), inset 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+.fortinet-chat-send {
+  background: linear-gradient(180deg, #e62830 0%, var(--fn-red) 40%, var(--fn-red-dark) 100%) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 9999px !important;
+  padding: 0.65rem 1.35rem !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  min-height: 2.75rem !important;
+  box-shadow: 0 4px 14px rgba(227, 27, 35, 0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.fortinet-chat-send:hover {
+  filter: brightness(1.12);
+  box-shadow: 0 8px 26px rgba(227, 27, 35, 0.55);
+  transform: translateY(-2px);
+}
+
+.fortinet-chat-send:active {
+  transform: translateY(0);
+}
+
+/* Botón flotante configuración: fijo al viewport, por encima de todo, despejado de barra de tareas / safe-area */
+#settings-btn.fortinet-settings-fab,
+#settings-btn {
+  position: fixed !important;
+  left: auto !important;
+  top: auto !important;
+  bottom: max(1.25rem, calc(env(safe-area-inset-bottom, 0px) + 0.75rem)) !important;
+  right: max(1.25rem, calc(env(safe-area-inset-right, 0px) + 0.75rem)) !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 4rem !important;
+  height: 4rem !important;
+  min-width: 4rem !important;
+  min-height: 4rem !important;
+  z-index: 9999 !important;
+  border: 1px solid rgba(227, 27, 35, 0.35) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 0 20px rgba(227, 27, 35, 0.15) !important;
+  transition: transform var(--fn-transition), box-shadow var(--fn-transition);
+  margin: 0 !important;
+}
+
+#settings-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 32px rgba(227, 27, 35, 0.25);
+}

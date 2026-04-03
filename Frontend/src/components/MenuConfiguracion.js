@@ -32,7 +32,8 @@ export const createMenuConfiguracion = () => {
     // Crear el elemento del menú
     menuElement = document.createElement('div');
     menuElement.id = 'menu-configuracion';
-    menuElement.className = 'absolute bottom-24 right-6 bg-black border border-red-600 rounded-lg shadow-xl overflow-hidden z-50 opacity-0 scale-95 transition-all duration-200';
+    // z-index por encima de SweetAlert2 (~1060) para que se vea tras el login
+    menuElement.className = 'absolute bottom-24 right-6 bg-black border border-red-600 rounded-lg shadow-xl overflow-hidden z-[11000] opacity-0 scale-95 transition-all duration-200';
     menuElement.style.minWidth = '250px';
 
     // Generar los botones dinámicamente desde OptionsMenu
@@ -80,10 +81,10 @@ export const createMenuConfiguracion = () => {
         }
     });
 
-    // Cerrar menú al hacer clic fuera
+    // Retrasar el listener: el cierre de Swal tras login dispara un clic fantasma que cerraba el menú al instante
     setTimeout(() => {
         document.addEventListener('click', handleClickOutside);
-    }, 0);
+    }, 400);
 
     return menuElement;
 };

@@ -75,7 +75,7 @@ class IntentValidator {
       };
     }
 
-    // Validación adicional: verificar que los campos existan en Datasheet
+    // Validación adicional: campos deben existir en fortigate_specs y/o Datasheet (mismo esquema PascalCase en FortiGate)
     if (intent.fields && intent.fields.length > 0) {
       const invalidFields = intent.fields.filter(field => !DatasheetColumns.includes(field));
       
@@ -84,7 +84,7 @@ class IntentValidator {
           valid: false,
           errors: [{
             field: 'fields',
-            message: `Los siguientes campos no existen en Datasheet: ${invalidFields.join(', ')}. Campos válidos: ${DatasheetColumns.join(', ')}`
+            message: `Los siguientes campos no existen en el catálogo de especificaciones: ${invalidFields.join(', ')}. Campos válidos: ${DatasheetColumns.join(', ')}`
           }],
           data: null
         };

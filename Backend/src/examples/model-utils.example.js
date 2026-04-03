@@ -2,30 +2,30 @@
  * Ejemplo de uso de model.utils.js
  */
 
-import { Datasheet } from '../models/Datasheet.model.js';
+import FortigateSpecs from '../models/FortigateSpecs.model.js';
 import { Product } from '../models/Product.model.js';
 import { getModelColumns, getDataColumns, getModelColumnsInfo } from '../utils/model.utils.js';
 
 // ====================================
 // Ejemplo 1: Obtener todas las columnas
 // ====================================
-const allColumns = getModelColumns(Datasheet);
-console.log('Todas las columnas de Datasheet:');
+const allColumns = getModelColumns(FortigateSpecs);
+console.log('Todas las columnas de fortigate_specs (FortigateSpecs):');
 console.log(allColumns);
 // ['id', 'UNIT', 'SKU', 'Firewall_Throughput_UDP', ..., 'createdAt', 'updatedAt']
 
 // ====================================
 // Ejemplo 2: Solo columnas de datos (sin id, timestamps)
 // ====================================
-const dataColumns = getDataColumns(Datasheet);
-console.log('\nColumnas de datos de Datasheet:');
+const dataColumns = getDataColumns(FortigateSpecs);
+console.log('\nColumnas de datos de fortigate_specs:');
 console.log(dataColumns);
 // ['UNIT', 'SKU', 'Firewall_Throughput_UDP', 'IPSec_VPN_Throughput', ...]
 
 // ====================================
 // Ejemplo 3: Excluir columnas específicas
 // ====================================
-const columnsWithoutSKU = getModelColumns(Datasheet, {
+const columnsWithoutSKU = getModelColumns(FortigateSpecs, {
   exclude: ['SKU', 'createdAt', 'updatedAt']
 });
 console.log('\nColumnas sin SKU ni timestamps:');
@@ -34,7 +34,7 @@ console.log(columnsWithoutSKU);
 // ====================================
 // Ejemplo 4: Solo timestamps
 // ====================================
-const onlyTimestamps = getModelColumns(Datasheet, {
+const onlyTimestamps = getModelColumns(FortigateSpecs, {
   includeTimestamps: true,
   includePrimaryKey: false
 }).filter(col => col === 'createdAt' || col === 'updatedAt');
@@ -45,7 +45,7 @@ console.log(onlyTimestamps);
 // ====================================
 // Ejemplo 5: Información detallada de columnas
 // ====================================
-const columnsInfo = getModelColumnsInfo(Datasheet);
+const columnsInfo = getModelColumnsInfo(FortigateSpecs);
 console.log('\nInformación detallada de columnas:');
 console.log(JSON.stringify(columnsInfo, null, 2));
 /*
@@ -70,15 +70,12 @@ console.log(JSON.stringify(columnsInfo, null, 2));
 // ====================================
 // Ejemplo 6: Uso en SELECT dinámico
 // ====================================
-async function getDatasheetFields() {
-  const fields = getDataColumns(Datasheet);
-  
-  // Usar en query de Sequelize
-  const datasheets = await Datasheet.findAll({
-    attributes: fields // Solo seleccionar columnas de datos
+async function getFortigateSpecsFields() {
+  const fields = getDataColumns(FortigateSpecs);
+  const rows = await FortigateSpecs.findAll({
+    attributes: fields,
   });
-  
-  return datasheets;
+  return rows;
 }
 
 // ====================================
@@ -100,7 +97,7 @@ function generateLLMSchema(model) {
   };
 }
 
-const llmSchema = generateLLMSchema(Datasheet);
+const llmSchema = generateLLMSchema(FortigateSpecs);
 console.log('\nEsquema para LLM:');
 console.log(JSON.stringify(llmSchema, null, 2));
 
@@ -108,6 +105,6 @@ export {
   allColumns, 
   dataColumns, 
   columnsWithoutSKU,
-  getDatasheetFields,
+  getFortigateSpecsFields,
   generateLLMSchema
 };

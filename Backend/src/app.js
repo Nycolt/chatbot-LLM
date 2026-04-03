@@ -18,7 +18,12 @@ import routes from './routes/index.js';
 const app = express();
 
 // Middlewares de seguridad
-app.use(helmet());
+// crossOriginResourcePolicy: por defecto Helmet usa same-origin y el navegador bloquea fetch desde otro origen (Live Server, Vite, etc.) → "Failed to fetch"
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  }),
+);
 app.use(cors({
   origin: config.cors.origin,
   credentials: true,

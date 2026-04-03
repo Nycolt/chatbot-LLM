@@ -1,4 +1,5 @@
 import AgentService from '../services/AgentService.js';
+import { renderSizingForm, removeSizingForm } from './SizingForm.js';
 
 const form = document.getElementById('chat-form');
 const chatbox = document.getElementById('chatbox');
@@ -74,10 +75,28 @@ const hideTypingIndicator = () => {
 const renderMessages = (messages) => {
   // Limpiar chatbox
   chatbox.innerHTML = '';
-  
-  // Filtrar solo mensajes de user y assistant
-  const visibleMessages = messages.filter(msg => msg.role === 'user' || msg.role === 'assistant');
-  
+
+  // Filtrar mensajes visibles
+  const visibleMessages = messages.filter(msg => {
+    if (!msg || !msg.role) return false;
+
+    // ❌ ocultar system
+    if (msg.role === 'system') return false;
+
+    // ❌ ocultar comando interno de control
+    if (
+      msg.role === 'user' &&
+      typeof msg.content === 'string' &&
+      (msg.content.includes('__START_FORTIGATE_SIZING__') ||
+        msg.content.includes('__START_FORTIGATE_VM_SIZING__'))
+    ) {
+      return false;
+    }
+
+    // ✅ solo user y assistant
+    return msg.role === 'user' || msg.role === 'assistant';
+  });
+
   // Renderizar cada mensaje
   visibleMessages.forEach(msg => {
     const type = msg.role === 'user' ? 'user' : 'agent';
@@ -86,19 +105,19 @@ const renderMessages = (messages) => {
 };
 
 /**
- * Crea un globo de mensaje en el chat
- * @param {string} message - El mensaje a mostrar
+ * Crea un globo de mensaje en el chat. En mensajes del agente añade "¿Volver al menú? Menú principal" (clickable).
+ * @param {string} message - El mensaje a mostrar (puede ser HTML)
  * @param {string} type - Tipo de mensaje: 'user', 'agent' o 'error'
  */
 const createMessageBubble = (message, type = 'user') => {
   const bubbleStyles = {
     user: {
       container: 'text-right',
-      bubble: 'inline-block bg-red-600 text-white px-4 py-2 rounded-2xl shadow-md whitespace-pre-wrap break-words'
+      bubble: 'inline-block bg-red-600 text-white px-4 py-2 rounded-2xl shadow-md whitespace-pre-wrap break-words max-w-[85%]'
     },
     agent: {
       container: 'text-left',
-      bubble: 'inline-block bg-gray-800 text-gray-200 px-4 py-2 rounded-2xl border border-red-600 whitespace-pre-wrap break-words'
+      bubble: 'inline-block bg-gray-800 text-gray-200 px-4 py-3 rounded-2xl border border-red-600/50 shadow-md whitespace-pre-wrap break-words max-w-[90%] chat-bubble-agent'
     },
     error: {
       container: 'text-left',
@@ -107,15 +126,41 @@ const createMessageBubble = (message, type = 'user') => {
   };
 
   const style = bubbleStyles[type] || bubbleStyles.user;
-  
-  chatbox.innerHTML += `
-    <div class="${style.container}">
-      <div class="${style.bubble}">${message}</div>
-    </div>
-  `;
-  
+
+  if (type === 'agent') {
+    const wrap = document.createElement('div');
+    wrap.className = style.container;
+    const bubble = document.createElement('div');
+    bubble.className = style.bubble;
+    bubble.innerHTML = message;
+    const footer = document.createElement('div');
+    footer.className = 'chat-bubble-menu-footer';
+    footer.innerHTML = '¿Volver al menú? ';
+    const link = document.createElement('button');
+    link.type = 'button';
+    link.className = 'chat-bubble-menu-link';
+    link.textContent = 'Menú principal';
+    link.addEventListener('click', () => goToMainMenu());
+    footer.appendChild(link);
+    bubble.appendChild(footer);
+    wrap.appendChild(bubble);
+    chatbox.appendChild(wrap);
+  } else {
+    chatbox.innerHTML += `
+      <div class="${style.container}">
+        <div class="${style.bubble}">${escapeHtml(String(message))}</div>
+      </div>
+    `;
+  }
+
   scrollToBottom();
 };
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
 
 /**
  * Maneja el envío del formulario
@@ -146,18 +191,46 @@ const handleSubmit = async (e) => {
     // Añadir mensaje del usuario y obtener todos los mensajes
     const updatedMessages = AgentService.addMessageAndReturn(userMessage);
 
-    // Generar respuesta del agente
-    const newMessages = await AgentService.generateAgentResponse(updatedMessages);
+    // Generar respuesta del agente (puede ser array o { messages, showForm, solutionType })
+    const result = await AgentService.generateAgentResponse(updatedMessages);
 
-    // Establecer los nuevos mensajes
+    const newMessages = Array.isArray(result) ? result : result.messages;
     AgentService.setMessages(newMessages);
-
-    // Ocultar indicador de "escribiendo"
     hideTypingIndicator();
-
-    // Renderizar todos los mensajes
     renderMessages(newMessages);
 
+    if (!Array.isArray(result) && result.showForm && result.solutionType) {
+      const chatbox = document.getElementById('chatbox');
+      if (chatbox) {
+        const st = Number(result.solutionType);
+        const formUserLabel =
+          st === 1
+            ? 'Dimensionar FortiGate (formulario)'
+            : st === 2
+              ? 'Dimensionar FortiGate VM (formulario)'
+              : st === 3
+                ? 'Dimensionar FortiWiFi (formulario)'
+                : st === 4
+                  ? 'Dimensionar FortiAnalyzer (formulario)'
+                  : st === 5
+                    ? 'Dimensionar FortiManager (formulario)'
+                    : st === 6
+                      ? 'Dimensionar FortiSwitch (formulario)'
+                      : 'Dimensionamiento (formulario)';
+        renderSizingForm(chatbox, st, (assistantContent) => {
+          removeSizingForm(chatbox);
+          AgentService.submitSizingFormResult(formUserLabel, assistantContent);
+          renderMessages(AgentService.getMessages());
+          scrollToBottom();
+        }, () => {
+          removeSizingForm(chatbox);
+          AgentService.returnToDimensionMenu();
+          renderMessages(AgentService.getMessages());
+          scrollToBottom();
+        });
+        scrollToBottom();
+      }
+    }
   } catch (err) {
     // Ocultar indicador de "escribiendo" en caso de error
     hideTypingIndicator();
@@ -180,7 +253,15 @@ input.addEventListener('keydown', (e) => {
  */
 form.addEventListener('submit', handleSubmit);
 
-
+/**
+ * Vuelve al menú principal: quita formulario de sizing, resetea estado y muestra solo el mensaje de bienvenida
+ */
+const goToMainMenu = () => {
+  removeSizingForm(chatbox);
+  AgentService.resetToMainMenu();
+  renderMessages(AgentService.getMessages());
+  scrollToBottom();
+};
 
 export {
 
@@ -200,6 +281,7 @@ export {
   showLoadingIndicator,
   hideLoadingIndicator,
   showTypingIndicator,
-  hideTypingIndicator
+  hideTypingIndicator,
+  goToMainMenu
 
 }

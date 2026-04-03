@@ -1,0 +1,28 @@
+-- =============================================================================
+-- AUDITORÍA — NO EJECUTAR DROP sin refactor completo
+-- Ver: Backend/Docs/audits/AUDIT_DatasheetTemporal_ProductoTemporal_Lifecycle.md
+-- =============================================================================
+--
+-- Las siguientes sentencias están COMENTADAS a propósito:
+--
+-- DatasheetTemporal  → usada por Datasheet.service + SP DebbugDatasheets + UI carga Excel
+-- ProductoTemporal   → usada por product.service + priceListUpload + SP DebbugProductos + UI
+-- ProductLifecycle   → consultada por lifecycle.service (ollama: intents compare / lifecycle)
+-- ProductReplacement → consultada por lifecycle.service cuando hay EOS/EOL
+--
+-- Descomentar y ejecutar SOLO después de:
+-- 1) Sustituir flujos temporales por otro mecanismo (y actualizar SPs), y/o
+-- 2) Eliminar o desviar en código todas las llamadas a lifecycle.service.
+--
+-- DROP TABLE IF EXISTS `DatasheetTemporal`;
+-- DROP TABLE IF EXISTS `ProductoTemporal`;
+-- DROP TABLE IF EXISTS `ProductReplacement`;
+-- DROP TABLE IF EXISTS `ProductLifecycle`;
+--
+-- =============================================================================
+-- Limpieza de DATOS (opcional en dev) — no elimina tablas
+-- =============================================================================
+-- TRUNCATE TABLE `ProductoTemporal`;
+-- TRUNCATE TABLE `DatasheetTemporal`;
+-- DELETE FROM `ProductLifecycle`;
+-- DELETE FROM `ProductReplacement`;

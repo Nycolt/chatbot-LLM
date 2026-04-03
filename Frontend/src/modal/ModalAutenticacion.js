@@ -44,21 +44,18 @@ export const ModalAutenticacion = (
             const { usuario, password } = result.value;
             try {
                 const res = await authenticate(usuario, password);
-                if (res && res.success) {
-                    if (res.message == "Inicio de sesión exitoso") {
-                        await Swal.fire({ icon: 'success', title: 'Autenticado', timer: 900, showConfirmButton: false });
-                        funExito(res.data);
-                    }
-                    else {
-                        await Swal.fire({ icon: 'error', title: 'No autorizado', text: res.message || 'Usuario o contraseña incorrectos' });
-                        funUnAut();
-                    }
+                if (res && res.success && res.data?.token) {
+                    await Swal.fire({ icon: 'success', title: 'Autenticado', timer: 900, showConfirmButton: false });
+                    funExito(res.data);
+                } else if (res && res.success) {
+                    await Swal.fire({ icon: 'error', title: 'Respuesta inválida', text: 'No se recibió token del servidor.' });
+                    funUnAut();
                 } else {
                     await Swal.fire({ icon: 'error', title: 'No autorizado', text: 'Usuario o contraseña incorrectos' });
                     funUnAut();
                 }
             } catch (err) {
-                if(err.response.status === 401){
+                if (err?.response?.status === 401) {
                     await Swal.fire({ icon: 'error', title: 'No autorizado', text: 'Usuario o contraseña incorrectos' });
                     funUnAut();
                     return;

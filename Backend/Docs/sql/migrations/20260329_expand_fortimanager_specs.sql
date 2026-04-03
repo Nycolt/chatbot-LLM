@@ -1,0 +1,9 @@
+-- FortiManager: ampliar fortimanager_specs para matriz PDF.
+-- Ejecutar la migración Sequelize (recomendado):
+--   Backend/migrations/20260329_000014_expand_fortimanager_specs_pdf_matrix.js
+--
+-- O añadir manualmente cada columna si tu MySQL no usa migraciones:
+--   default_managed_devices, default_adoms, log_gb_per_day, sustained_log_rates,
+--   storage_capacity, usable_storage, raid_levels, total_interfaces,
+--   redundant_power, removable_disks, sed
+-- (todas VARCHAR nullable; ver definición en la migración JS).
