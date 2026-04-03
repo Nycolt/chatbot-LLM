@@ -1,8 +1,32 @@
-# 🤖 Chat FAQ LLM - Fortinet Products Assistant
+# 🤖 Chatbot - Asistente Fortinet
 
-Sistema de chat inteligente para consultas sobre productos Fortinet, potenciado por LLM (modelos de lenguaje grandes) local (Ollama) o externo (OpenRouter).
+Sistema inteligente de preventa en ciberseguridad que automatiza la recomendación, dimensionamiento y comparación de soluciones Fortinet mediante reglas de negocio, base de datos técnica y modelos de lenguaje (LLM): local (Ollama) o externo (OpenRouter).
 
 ---
+## 🎯 Objetivo
+
+Automatizar procesos de preventa en ciberseguridad mediante un asistente inteligente que permite recomendar, dimensionar y comparar soluciones Fortinet utilizando reglas de negocio, base de datos técnica y modelos de lenguaje (LLM).
+
+---
+
+## 🚀 Funcionalidades principales
+
+- 🔍 Recomendación de soluciones Fortinet según necesidades
+- 📊 Dimensionamiento técnico (FortiGate, FortiAnalyzer, etc.)
+- ⚖️ Comparación entre modelos
+- 🤖 Asistente conversacional con soporte LLM (Ollama / OpenRouter)
+- 📦 Integración con listas de precios (Excel)
+- 📥 Buzón de necesidades para mejora continua
+
+---
+## 💡 Caso de uso
+
+Este proyecto está diseñado para equipos comerciales y de preventa que requieren:
+
+- Reducir tiempos de dimensionamiento técnico
+- Mejorar la precisión en la selección de soluciones
+- Centralizar información técnica y comercial
+- Automatizar análisis de requerimientos del cliente
 
 ## 📋 Tabla de Contenidos
 
@@ -33,7 +57,7 @@ Sistema de chat inteligente para consultas sobre productos Fortinet, potenciado 
 ---
 
 ## 🏗️ Arquitectura del Proyecto
-
+Arquitectura basada en cliente-servidor con integración de inteligencia artificial y base de datos técnica especializada en soluciones Fortinet.
 ```
 ├── Backend/              # API REST con Node.js + Express
 │   ├── src/
@@ -485,6 +509,93 @@ docker exec -i mysql_db mysql -u root -p"$MYSQL_ROOT_PASSWORD" chat_db < ruta/a/
 - **LLM**: Ollama (local) / OpenRouter (cloud)
 - **Infraestructura**: Docker, docker-compose
 - **DB**: MySQL 8.0, phpMyAdmin
+
+---
+## 🧠 Arquitectura técnica y stack
+
+### 🧩 Frameworks y stack
+
+| Capa | Tecnología |
+|------|------------|
+| Backend | Node.js + Express 4 |
+| ORM | Sequelize 6 |
+| Base de datos | MySQL |
+| Frontend | HTML + JavaScript (ES Modules) + Tailwind |
+| Validación | express-validator |
+| Autenticación | JWT (jsonwebtoken) + bcrypt |
+| Archivos | multer |
+
+> ⚠️ El frontend está construido sin frameworks SPA (React/Vue), utilizando JavaScript puro modular.
+
+---
+
+### 🔐 Seguridad implementada
+
+El backend incluye varias medidas de seguridad:
+
+#### 🛡️ Seguridad HTTP
+- Uso de **helmet** para cabeceras seguras
+- Configuración de `crossOriginResourcePolicy` para permitir consumo desde frontend en distinto origen
+
+#### 🌐 CORS
+- Configuración dinámica por entorno
+- Soporte para credenciales (`credentials: true`)
+
+#### 🔑 Autenticación y autorización
+- JWT con expiración configurable
+- Middleware `protect` para rutas protegidas
+- Soporte de roles (`authorize`)
+
+> ⚠️ Actualmente el endpoint `/agent/ask` es público (no protegido con JWT)
+
+#### ✅ Validación de datos
+- Validación de inputs con `express-validator`
+- Manejo centralizado de errores
+
+#### 🔒 Manejo de contraseñas
+- Hash con bcrypt (factor 10)
+- Comparación segura en login
+
+#### 📂 Subida de archivos
+- Uso de multer con límites de tamaño
+- Restricción a PDF para datasheets
+
+#### ⚠️ Manejo de errores
+- Control de errores JWT (expiración, token inválido)
+- Respuestas estructuradas
+- Stack visible solo en desarrollo
+
+#### 📊 Logging
+- Implementación con Winston y express-winston
+
+---
+
+### ⚠️ Consideraciones de seguridad
+
+El sistema actualmente no incluye:
+
+- Rate limiting (protección contra ataques de fuerza bruta)
+- Protección CSRF (no necesaria en JWT stateless, pero evaluable)
+- Validación estricta de MIME en todos los uploads
+- Protección del endpoint del agente (puede requerir autenticación en producción)
+
+---
+
+## ✅ Estado del proyecto
+
+Proyecto finalizado.
+
+✔ Sistema de dimensionamiento técnico implementado  
+✔ Motor de recomendación funcional  
+✔ Comparador de soluciones integrado  
+✔ Asistente conversacional con soporte LLM  
+✔ Integración con base de datos y listas de precios  
+✔ Buzón de necesidades para mejora continua  
+
+🔧 Posibles mejoras futuras:
+- Expansión a más soluciones del ecosistema Fortinet  
+- Optimización de respuestas del LLM  
+- Implementación de medidas adicionales de seguridad (rate limiting, protección del agente)
 
 ---
 
