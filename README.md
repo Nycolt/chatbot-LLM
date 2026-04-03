@@ -2,6 +2,23 @@
 
 Sistema inteligente de preventa en ciberseguridad que automatiza la recomendación, dimensionamiento y comparación de soluciones Fortinet mediante reglas de negocio, base de datos técnica y modelos de lenguaje (LLM): local (Ollama) o externo (OpenRouter).
 
+# 📋 Tabla de Contenidos
+
+- [Objetivo](#-objetivo)
+- [Funcionalidades](#-funcionalidades-principales)
+- [Caso de uso](#-caso-de-uso)
+- [Tecnologías](#-tecnologías)
+- [Arquitectura técnica y stack](#-arquitectura-técnica-y-stack)
+- [Seguridad Implementada](#-seguridad-implementada)
+- [Estado del proyecto](#-estado-del-proyecto)
+- [Requisitos](#-requisitos)
+- [Arquitectura del Proyecto](#-arquitectura-del-proyecto)
+- [Instalación Rápida](#-instalación-rápida)
+- [Configuración de Variables de Entorno](#-configuración-de-variables-de-entorno)
+- [Configuración Detallada](#-configuración-detallada)
+- [Ejecución](#-ejecución)
+- [Scripts Disponibles](#-scripts-disponibles)
+- [Solución de Problemas](#-solución-de-problemas)
 ---
 ## 🎯 Objetivo
 
@@ -28,16 +45,102 @@ Este proyecto está diseñado para equipos comerciales y de preventa que requier
 - Centralizar información técnica y comercial
 - Automatizar análisis de requerimientos del cliente
 
-## 📋 Tabla de Contenidos
+---
 
-- [Requisitos](#-requisitos)
-- [Arquitectura del Proyecto](#-arquitectura-del-proyecto)
-- [Instalación Rápida](#-instalación-rápida)
-- [Configuración de Variables de Entorno](#-configuración-de-variables-de-entorno)
-- [Configuración Detallada](#-configuración-detallada)
-- [Ejecución](#-ejecución)
-- [Scripts Disponibles](#-scripts-disponibles)
-- [Solución de Problemas](#-solución-de-problemas)
+## 🛠️ Tecnologías
+
+- **Backend**: Node.js, Express, MySQL, Sequelize
+- **Frontend**: HTML5, JavaScript ES6+, Tailwind CSS
+- **LLM**: Ollama (local) / OpenRouter (cloud)
+- **Infraestructura**: Docker, docker-compose
+- **DB**: MySQL 8.0, phpMyAdmin
+
+---
+## 🧠 Arquitectura técnica y stack
+
+### 🧩 Frameworks y stack
+
+| Capa | Tecnología |
+|------|------------|
+| Backend | Node.js + Express 4 |
+| ORM | Sequelize 6 |
+| Base de datos | MySQL |
+| Frontend | HTML + JavaScript (ES Modules) + Tailwind |
+| Validación | express-validator |
+| Autenticación | JWT (jsonwebtoken) + bcrypt |
+| Archivos | multer |
+
+> ⚠️ El frontend está construido sin frameworks SPA (React/Vue), utilizando JavaScript puro modular.
+
+---
+
+### 🔐 Seguridad implementada
+
+El backend incluye varias medidas de seguridad:
+
+#### 🛡️ Seguridad HTTP
+- Uso de **helmet** para cabeceras seguras
+- Configuración de `crossOriginResourcePolicy` para permitir consumo desde frontend en distinto origen
+
+#### 🌐 CORS
+- Configuración dinámica por entorno
+- Soporte para credenciales (`credentials: true`)
+
+#### 🔑 Autenticación y autorización
+- JWT con expiración configurable
+- Middleware `protect` para rutas protegidas
+- Soporte de roles (`authorize`)
+
+> ⚠️ Actualmente el endpoint `/agent/ask` es público (no protegido con JWT)
+
+#### ✅ Validación de datos
+- Validación de inputs con `express-validator`
+- Manejo centralizado de errores
+
+#### 🔒 Manejo de contraseñas
+- Hash con bcrypt (factor 10)
+- Comparación segura en login
+
+#### 📂 Subida de archivos
+- Uso de multer con límites de tamaño
+- Restricción a PDF para datasheets
+
+#### ⚠️ Manejo de errores
+- Control de errores JWT (expiración, token inválido)
+- Respuestas estructuradas
+- Stack visible solo en desarrollo
+
+#### 📊 Logging
+- Implementación con Winston y express-winston
+
+---
+
+### ⚠️ Consideraciones de seguridad
+
+El sistema actualmente no incluye:
+
+- Rate limiting (protección contra ataques de fuerza bruta)
+- Protección CSRF (no necesaria en JWT stateless, pero evaluable)
+- Validación estricta de MIME en todos los uploads
+- Protección del endpoint del agente (puede requerir autenticación en producción)
+
+---
+
+## ✅ Estado del proyecto
+
+Proyecto finalizado.
+
+✔ Sistema de dimensionamiento técnico implementado  
+✔ Motor de recomendación funcional  
+✔ Comparador de soluciones integrado  
+✔ Asistente conversacional con soporte LLM  
+✔ Integración con base de datos y listas de precios  
+✔ Buzón de necesidades para mejora continua  
+
+🔧 Posibles mejoras futuras:
+- Expansión a más soluciones del ecosistema Fortinet  
+- Optimización de respuestas del LLM  
+- Implementación de medidas adicionales de seguridad (rate limiting, protección del agente)
 
 ---
 
@@ -502,102 +605,6 @@ docker exec -i mysql_db mysql -u root -p"$MYSQL_ROOT_PASSWORD" chat_db < ruta/a/
 
 ---
 
-## 🛠️ Tecnologías
-
-- **Backend**: Node.js, Express, MySQL, Sequelize
-- **Frontend**: HTML5, JavaScript ES6+, Tailwind CSS
-- **LLM**: Ollama (local) / OpenRouter (cloud)
-- **Infraestructura**: Docker, docker-compose
-- **DB**: MySQL 8.0, phpMyAdmin
-
----
-## 🧠 Arquitectura técnica y stack
-
-### 🧩 Frameworks y stack
-
-| Capa | Tecnología |
-|------|------------|
-| Backend | Node.js + Express 4 |
-| ORM | Sequelize 6 |
-| Base de datos | MySQL |
-| Frontend | HTML + JavaScript (ES Modules) + Tailwind |
-| Validación | express-validator |
-| Autenticación | JWT (jsonwebtoken) + bcrypt |
-| Archivos | multer |
-
-> ⚠️ El frontend está construido sin frameworks SPA (React/Vue), utilizando JavaScript puro modular.
-
----
-
-### 🔐 Seguridad implementada
-
-El backend incluye varias medidas de seguridad:
-
-#### 🛡️ Seguridad HTTP
-- Uso de **helmet** para cabeceras seguras
-- Configuración de `crossOriginResourcePolicy` para permitir consumo desde frontend en distinto origen
-
-#### 🌐 CORS
-- Configuración dinámica por entorno
-- Soporte para credenciales (`credentials: true`)
-
-#### 🔑 Autenticación y autorización
-- JWT con expiración configurable
-- Middleware `protect` para rutas protegidas
-- Soporte de roles (`authorize`)
-
-> ⚠️ Actualmente el endpoint `/agent/ask` es público (no protegido con JWT)
-
-#### ✅ Validación de datos
-- Validación de inputs con `express-validator`
-- Manejo centralizado de errores
-
-#### 🔒 Manejo de contraseñas
-- Hash con bcrypt (factor 10)
-- Comparación segura en login
-
-#### 📂 Subida de archivos
-- Uso de multer con límites de tamaño
-- Restricción a PDF para datasheets
-
-#### ⚠️ Manejo de errores
-- Control de errores JWT (expiración, token inválido)
-- Respuestas estructuradas
-- Stack visible solo en desarrollo
-
-#### 📊 Logging
-- Implementación con Winston y express-winston
-
----
-
-### ⚠️ Consideraciones de seguridad
-
-El sistema actualmente no incluye:
-
-- Rate limiting (protección contra ataques de fuerza bruta)
-- Protección CSRF (no necesaria en JWT stateless, pero evaluable)
-- Validación estricta de MIME en todos los uploads
-- Protección del endpoint del agente (puede requerir autenticación en producción)
-
----
-
-## ✅ Estado del proyecto
-
-Proyecto finalizado.
-
-✔ Sistema de dimensionamiento técnico implementado  
-✔ Motor de recomendación funcional  
-✔ Comparador de soluciones integrado  
-✔ Asistente conversacional con soporte LLM  
-✔ Integración con base de datos y listas de precios  
-✔ Buzón de necesidades para mejora continua  
-
-🔧 Posibles mejoras futuras:
-- Expansión a más soluciones del ecosistema Fortinet  
-- Optimización de respuestas del LLM  
-- Implementación de medidas adicionales de seguridad (rate limiting, protección del agente)
-
----
 
 ## 📝 Notas Adicionales
 
