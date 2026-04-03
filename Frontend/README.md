@@ -1,8 +1,19 @@
-# 📐 Asistente Fortinet - Sistema de Gestión de Productos
+# 🎨 Frontend - Asistente Fortinet
 
-**Descripción corta:** Aplicación web para gestión y carga masiva de productos Fortinet (Excel) con autenticación, validación y chatbot.
+Aplicación web tipo Single Page que permite interactuar con un asistente inteligente, gestionar productos Fortinet y cargar información mediante archivos Excel.
 
-**Última actualización:** 2026-01-16
+---
+
+## 🎯 Propósito
+
+Proporcionar una interfaz interactiva para:
+
+- 🤖 Comunicación con el asistente conversacional
+- 📊 Carga masiva de productos mediante Excel
+- 🔐 Autenticación de usuarios
+- 📦 Integración con el backend de preventa
+  
+**Última actualización:** 2026-04-02
 
 **Mantenedor:** Equipo Nycolt
 
@@ -11,60 +22,98 @@ Aplicación web para la gestión y carga masiva de productos Fortinet mediante a
 
 ---
 
+## 🧩 Tipo de aplicación
+
+- Aplicación web tipo **Single Page Application (SPA clásica)**
+- Desarrollada con **HTML + JavaScript ES Modules**
+- No utiliza frameworks como React, Vue o Angular
+- Se ejecuta directamente en navegador con servidor estático
+
+---
+
+## ⚙️ Arranque de la aplicación
+
+- `index.html` → estructura UI + librerías (Tailwind, SweetAlert2, SheetJS)
+- `main.js` → inicialización global del sistema
+
+Flujo de inicio:
+
+DOMContentLoaded  
+→ ConfiguracionInicial()  
+→ initVariables()  
+→ initSweetAlert()  
+→ initAgentChat()
+
+...
+
 ## 🏗️ Estructura del Proyecto
 
 ```
 Frontend/
-├── index.html                      # Punto de entrada HTML
-├── main.js                         # Punto de entrada JavaScript (módulo ES6)
-├── jsconfig.json                   # Configuración de JavaScript
-├── tailwind.config.js              # Configuración de Tailwind CSS
-├── soluciones.json                 # Datos de soluciones/productos
-├── README.md                       # Este archivo
-├── .gitignore                      # Archivos ignorados por Git
+├── index.html                      # Shell del chat, meta api-base, CDNs (Tailwind, SweetAlert2, SheetJS)
+├── main.js                         # Punto de entrada ES module (DOMContentLoaded → init)
+├── jsconfig.json                   # ES2020 / paths @/* → src/*
+├── tailwind.config.js              # Config Tailwind (content: html + js)
+├── soluciones.json                 # Datos de soluciones / referencia
+├── README.md                       # Documentación del frontend (si está versionado)
+├── .gitignore
 │
-├── Docs/                           # Plantillas Excel de referencia
-│   └── python/
-│       └── Fortinet_Products.xlsx  # Plantilla de productos
-│
-└── src/                            # Código fuente
-    ├── config/                     # Configuración global
-    │   ├── variables.js            # Variables globales (API URLs)
-    │   ├── sweetalert.js           # Configuración de SweetAlert2
-    │   ├── fetch.js                # HTTP client y configuración
-    │   └── columnasExcel.js        # Definición de columnas requeridas
+└── src/
+    ├── Agent/
+    │   └── prompt.js               # Prompt / instrucciones del asistente
     │
-    ├── components/                 # Componentes de UI
-    │   └── ComponentesFormulario.js # Chat form y controles
+    ├── config/
+    │   ├── variables.js            # apiUrl, getResolvedApiBase(), initVariales()
+    │   ├── localStorage.js         # Helpers de almacenamiento (token, etc.)
+    │   ├── fetch.js                # httpService (fetch + timeout + Bearer)
+    │   ├── sweetalert.js           # Tema / defaults SweetAlert2
+    │   ├── columnasExcel.js        # Columnas esperadas en Excel
+    │   ├── compareFlow.config.js   # Textos / HTML flujo comparación
+    │   └── datasheetPdfSolutions.js  # Mapeo soluciones ↔ carga PDF
     │
-    ├── modal/                      # Modales (SweetAlert2)
-    │   ├── ModalAutenticacion.js   # Modal de login
-    │   └── ModalCargaDocumentos.js # Modal de carga Excel drag & drop
+    ├── components/
+    │   ├── ComponentesFormulario.js  # Chat: burbujas, envío, render mensajes
+    │   ├── MenuActions.js            # FAB configuración → popups / acciones
+    │   ├── MenuActions.fun.js        # Helpers del menú
+    │   ├── MenuConfiguracion.js      # Panel / opciones de configuración
+    │   ├── SizingForm.js             # Formulario dinámico (schema desde API)
+    │   ├── CompareTable.js           # Tabla + narrativa comparación
+    │   ├── CompareModelPicker.js     # Selector de modelos en comparación
+    │   └── BuzonNecesidades.js      # UI buzón de necesidades (si aplica al flujo actual)
     │
-    ├── services/                   # Servicios (API calls)
-    │   ├── AuthService.js          # Servicio de autenticación
-    │   ├── ChatService.js          # Servicio de chat
-    │   └── ExcelService.js         # Servicio de productos Excel
+    ├── modal/
+    │   ├── ModalAutenticacion.js     # Login / registro
+    │   ├── ModalCargaDocumentos.js     # Carga Excel (drag & drop / legacy flujo)
+    │   └── ModalCargaDatasheetPdf.js   # Carga datasheet PDF
     │
-    ├── utils/                      # Utilidades
-    │   ├── excelValidator.js       # Validadores de Excel
-    │   ├── fixedData.js            # Transformación de datos
-    │   └── clipboard.js            # Utilidades de portapapeles
+    ├── services/
+    │   ├── AgentService.js           # Chat, menús, sizing, compare (antes “ChatService” conceptual)
+    │   ├── AuthService.js
+    │   ├── ExcelService.js
+    │   ├── DatasheetPdfService.js
+    │   └── PriceListService.js
     │
-    ├── img/                        # Recursos gráficos
-    │   ├── favicon/                # Favicons
-    │   └── lib/                    # Imágenes de librerías
+    ├── utils/
+    │   ├── excelValidator.js
+    │   ├── fixedData.js
+    │   ├── clipboard.js
+    │   └── compareFallbackRecommendation.js  # Fallback si falla narrativa API
     │
-    ├── style/                      # Estilos CSS
-    │   ├── style.css               # Estilos globales
-    │   └── form.css                # Estilos de formularios
+    ├── style/
+    │   ├── style.css                 # Globales / layout app
+    │   ├── form.css                  # Burbujas, menús, inputs chat
+    │   ├── chat-theme.css            # Tema Fortinet / animaciones mensajes
+    │   └── compare-table.css         # Estilos tabla comparación
     │
-    ├── page/                       # Páginas adicionales
-    ├── php/                        # Scripts PHP backend
+    ├── img/
+    │   └── lib/                      # Favicon, manifest, logos (rutas usadas en index.html)
+    │
+    ├── php/                          # Scripts PHP (import / proceso Excel legacy)
     │   ├── import_excel.php
     │   └── process_excel.php
+    │
     └── other/
-        └── ExampleBodyExcel.json   # Ejemplos de estructura
+        └── ExampleBodyExcel.json     # Ejemplo de cuerpo / estructura
 ```
 
 ---
@@ -74,46 +123,93 @@ Frontend/
 ### **Patrón de Diseño: Modular con ES6 Modules**
 
 ```
-┌─────────────────────────────────────────────┐
-│           index.html                        │
-│  (UI + Tailwind + SweetAlert2 + SheetJS)    │
-└─────────────────┬───────────────────────────┘
-                  │
-                  ├─> main.js (Entry Point)
-                  │
-    ┌─────────────┴─────────────┐
-    │   ConfiguracionInicial()  │
-    └─────────────┬─────────────┘
-                  │
-    ┌─────────────┼──────────────────────────────┐
-    │             │                              │
-    v             v                              v
-┌─────────┐  ┌──────────┐        ┌──────────────────────────┐
-│ Config  │  │Components│        │       Modales            │
-│         │  │          │        │                          │
-│variables│  │Formulario│        │  ModalAutenticacion      │
-│sweetalrt│  │  Chat    │        │  ModalCargaDocumentos    │
-│ fetch   │  │          │        │  (con validación Excel)  │
-│columns  │  │          │        └──────────┬───────────────┘
-└─────────┘  └──────────┘                   │
-                  │                          │
-                  v                          v
-             ┌─────────┐            ┌────────────────┐
-             │ ChatBox │            │   Services     │
-             │  (UI)   │            │                │
-             └─────────┘            │ AuthService    │
-                                    │ ExcelService   │
-                                    │ ChatService    │
-                                    └────────┬───────┘
-                                             │
-                                             v
-                                    ┌─────────────────┐
-                                    │ Utils/Validator │
-                                    │                 │
-                                    │ excelValidator  │
-                                    │ fixedData       │
-                                    └─────────────────┘
+
+┌──────────────────────────────────────────────────────────┐
+│                     index.html                            │
+│  UI + Tailwind (CDN) + SweetAlert2 + SheetJS (CDN)        │
+│  meta api-base → URL del Backend /api/v1                   │
+└───────────────────────────┬──────────────────────────────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │   main.js     │  ← punto de entrada (type="module")
+                    │  DOMContentLoaded
+                    └───────┬───────┘
+                            │
+                            ▼
+                ┌───────────────────────┐
+                │  ConfiguracionInicial() │
+                └───────────┬───────────┘
+                            │
+        ┌───────────────────┼────────────────────────────┐
+        │                   │                            │
+        ▼                   ▼                            ▼
+ ┌─────────────┐   ┌─────────────────┐        ┌─────────────────────────┐
+ │   config/   │   │  components/  │        │        modal/             │
+ │             │   │                 │        │                         │
+ │ variables   │   │ Componentes     │        │ ModalAutenticacion      │
+ │ fetch       │   │   Formulario    │        │ ModalCargaDocumentos    │
+ │ sweetalert  │   │   (chat UI)     │        │ ModalCargaDatasheetPdf  │
+ │ localStorage│   │ MenuActions (+  │        │   (PDF datasheets)      │
+ │ columnas    │   │   .fun)         │        └────────────┬────────────┘
+ │ Excel       │   │ MenuConfiguracion                     │
+ │ compareFlow │   │ SizingForm      │                     │
+ │ datasheet   │   │ CompareTable /  │                     │
+ │ PdfSolutions│   │ CompareModel    │                     │
+ └─────────────┘   │ Picker          │                     │
+                   │ BuzonNecesidades│                     │
+                   │ (si aplica)     │                     │
+                   └────────┬────────┘                     │
+                            │                             │
+                            ▼                             ▼
+                   ┌─────────────────┐          ┌──────────────────────────┐
+                   │  #chatbox (UI)  │          │       services/           │
+                   │  render mensajes│          │                           │
+                   │  innerHTML asst.│          │ AgentService ← chat + menús│
+                   └────────┬────────┘          │   + sizing + compare     │
+                            │                   │ AuthService              │
+                            │                   │ ExcelService             │
+                            │                   │ DatasheetPdfService      │
+                            │                   │ PriceListService         │
+                            │                   └────────────┬─────────────┘
+                            │                                │
+                            ▼                                │
+                   ┌─────────────────┐                       │
+                   │    Agent/       │                       │
+                   │   prompt.js     │◄── usado por AgentService / agente
+                   └─────────────────┘                       │
+                            │                                ▼
+                            │                   ┌──────────────────────────┐
+                            │                   │        utils/             │
+                            │                   │ excelValidator            │
+                            │                   │ fixedData                   │
+                            │                   │ clipboard                   │
+                            │                   │ compareFallbackRecommendation│
+                            └──────────────────►│  (si falla API narrativa)   │
+                                                └──────────────────────────┘
+                                                            │
+                                                            ▼
+                                                ┌──────────────────────────┐
+                                                │   Backend REST (fetch)    │
+                                                │   /agent/ask, /sizing/*,  │
+                                                │   /compare/*, auth, etc. │
+                                                └──────────────────────────┘
 ```
+
+---
+## 🔌 Comunicación con backend
+
+El frontend consume una API REST:
+
+- Base URL configurable en `src/config/variables.js`
+- Uso de `fetch` mediante servicio centralizado (`httpService`)
+- Manejo de autenticación mediante JWT (Bearer Token)
+
+Endpoints principales:
+
+- `/agent/ask` → Chat con el asistente  
+- `/sizing/submit` → Dimensionamiento  
+- `/compare` → Comparación de modelos
 
 ---
 
@@ -301,6 +397,16 @@ ModalCargaDocumentos(
 ```
 
 ---
+## 🧠 Lógica del chat
+
+El flujo del asistente está gestionado por:
+
+- `AgentService.js` → manejo de estado y flujo conversacional
+- Estados UI: idle, menú, dimensionamiento, comparación
+- Manejo de historial de mensajes
+- Integración con backend para respuestas dinámicas
+  
+---
 
 ### **5. Validadores (`src/utils/excelValidator.js`)**
 
@@ -425,51 +531,175 @@ Funciones para copiar datos al portapapeles.
 
 ## 🔄 Flujo de Datos
 
-### **Flujo completo de Carga de Productos:**
+### **Flujo completo de Carga de Datasheets:**
 
 ```
+
 [Usuario]
     │
     ├─> Click en botón engranaje (settings-btn)
     │
-    ├─> ModalAutenticacion()
+    ├─> ¿Sesión activa? (AuthService.isLogged() + token en localStorage)
     │       │
-    │       ├─> Usuario ingresa credenciales
+    │       ├─> NO → ModalAutenticacion()
+    │       │       │
+    │       │       ├─> Credenciales → AuthService.login / register
+    │       │       └─> setTokenAuth(token)   // fetch.js + localStorage (Bearer en subidas)
     │       │
-    │       ├─> AuthService.Login(usuario, credencial)
-    │       │
-    │       └─> setTokenAuth(token) // Guarda token para futuras peticiones
+    │       └─> SÍ (o tras login) → createMenuConfiguracion()  // menú desplegable
     │
-    └─> ModalCargaDocumentos()
+    └─> Opción «Cargar datasheet PDF» → CargarDatasheetPdf()   [MenuActions.fun.js]
             │
-            ├─> Mostrar enlace de descarga de plantilla Excel
-            │
-            ├─> Usuario arrastra archivo Excel
-            │
-            ├─> FileReader lee archivo
-            │
-            ├─> XLSX.read() parsea el workbook
-            │
-            ├─> Lee todas las hojas y agrega propiedad 'familia'
-            │
-            ├─> XLSX.utils.sheet_to_json() convierte a JSON
-            │
-            ├─> ValidarProducto(data)
+            ├─> openModalCargaDatasheetPdf()   [ModalCargaDatasheetPdf.js]
             │       │
-            │       ├─> validateAllSheetsColumns() // Columnas requeridas
-            │       ├─> validateNoExtraColumns()   // Sin columnas extras
-            │       └─> validateNotEmptyColumns()  // UNIT y SKU no vacíos
-            │
-            ├─> Si válido: continuar
-            │   Si inválido: mostrar errores detallados
-            │
-            ├─> fixedData(data) // Transformar formato
-            │
-            ├─> ExcelService.InsertarProductos(data)
+            │       ├─> SweetAlert2: select solución obligatoria
+            │       │       (opciones desde datasheetPdfSolutions.js → alineado con backend)
             │       │
-            │       └─> POST /product/insertar/masivo
+            │       ├─> Zona drag & drop + <input type="file" accept="application/pdf,.pdf">
+            │       │       (sin XLSX: solo PDF)
+            │       │
+            │       └─> preConfirm:
+            │               • solutionType no vacío
+            │               • archivo presente
+            │               • extensión .pdf
+            │       → { file, solutionType }  |  cancel → reject('cancelled')
             │
-            └─> Mostrar mensaje de éxito/error
+            ├─> DatasheetPdfService.uploadDatasheetPdf(file, solutionType)
+            │       │
+            │       ├─> FormData: campo "file" + campo "solutionType"
+            │       │
+            │       └─> POST {apiUrl}/datasheet/pdf/upload
+            │               headers: Authorization: Bearer <token> (si existe)
+            │               body: multipart/form-data (no JSON)
+            │       │
+            │       └─> Backend [datasheet.routes.js]:
+            │               protect (JWT)
+            │               → uploadDatasheetPdfMiddleware (multer, memoria, límite ~35MB, solo PDF)
+            │               → uploadDatasheetPdf [datasheetPdf.controller.js]
+            │               → ingest PDF (texto/tablas), upsert catálogo / specs según solución
+            │
+            ├─> Si respuesta OK:
+            │       ├─> success + data.report.warnings[] → SweetAlert advertencias (lista)
+            │       └─> sin warnings → SweetAlert éxito breve
+            │
+            ├─> Si 401 → quitar token, mensaje sesión expirada
+            │
+            └─> Si error red / 4xx / 5xx → SweetAlert con message del API
+
+---
+```
+Nota: Carga masiva por Excel (datasheets en filas) sigue siendo otro flujo:
+      ModalCargaDocumentos → XLSX → validadores → ExcelService → POST /datasheet/insertar/masivo
+      
+### **Flujo completo de Carga de Lista de Fortinet:**
+```
+
+[Usuario]
+    │
+    ├─> Click engranaje (settings-btn)
+    │
+    ├─> ¿Sesión activa? (AuthService.isLogged)
+    │       ├─> NO → ModalAutenticacion → token → setTokenAuth → menú configuración
+    │       └─> SÍ → createMenuConfiguracion()
+    │
+    └─> «Cargar Price List Fortinet» → CargarPriceListFortinet()  [MenuActions.fun.js]
+            │
+            ├─> ModalCargaDocumentos(
+            │       título: "Cargar Price List Fortinet (Main Price List)",
+            │       plantilla: null (enlace "aquí" queda en '#' si no hay URL),
+            │       options: { accept: ".xlsx,.xls", parseExcel: false }   ← modo “archivo crudo”
+            │   )
+            │       │
+            │       ├─> Drag & drop o selector de archivo
+            │       │
+            │       ├─> preConfirm: exige archivo; NO exige .xlsx en código si accept es solo xlsx/xls
+            │       │       (validación fuerte solo en modo parseExcel con isExcelMode)
+            │       │
+            │       └─> FileReader.readAsArrayBuffer(file)
+            │               → sin XLSX.read en frontend (parseExcel: false)
+            │               → valor devuelto: { file, name, size, type, data, arrayBuffer }
+            │
+            ├─> Callback éxito → payload?.file
+            │
+            ├─> PriceListService.uploadFortinetPriceList(file)
+            │       │
+            │       ├─> FormData.append("file", file)   // campo que espera multer: 'file'
+            │       │
+            │       └─> POST {apiUrl}/price-list/upload
+            │               Authorization: Bearer <token> (si hay sesión)
+            │               multipart/form-data
+            │
+            └─> Backend [priceList.routes.js]
+                    router.use(protect)   // JWT obligatorio en todo el módulo
+                    │
+                    ├─> uploadPriceListFileMiddleware (multer memoryStorage, límite ~20 MB)
+                    │
+                    └─> priceList.controller.uploadPriceList
+                            ├─> req.file.buffer → uploadPriceListFile(...)  [priceListUpload.service]
+                            │       • crea batch (PriceUploadBatch), staging, ETL a catálogo/ofertas
+                            │       • sourceType: 'fortinet_official'
+                            │
+                            └─> Respuesta ApiResponse.created: success + data (p. ej. batch_id, status)
+
+            ├─> Frontend: si success → Swal éxito (muestra batch_id / status si vienen)
+            ├─> Si error → Swal error con message del API
+            └─> Si 401 → borra token + “Sesión expirada”
+```
+
+### **Flujo completo de Buzón de Necesidades**{
+Tiene dos carriles: (A) cómo entran los registros, (B) cómo los revisa un usuario autenticado.
+A) Alta automática (cada pregunta al chat)
+```
+
+[Usuario en el chat]
+    │
+    └─> Envío mensaje → POST /api/v1/agent/ask  (array de mensajes)
+            │
+            └─> ollama.controller: si hay texto de usuario no vacío
+                    needsInboxService.createFromUserQuestion(userText).catch(...)
+                    │   • asíncrono: no bloquea la respuesta del agente
+                    │   • persiste en needs_inbox (clasificación inicial / scores / keywords según servicio)
+                    └─> el agente sigue: sizing, recomendación, LLM, etc.
+```
+B) Panel de revisión (menú engranaje)
+```
+
+[Usuario administrador / revisor]
+    │
+    ├─> Engranaje → sesión activa (misma lógica login que arriba)
+    │
+    └─> «Buzón de Necesidades» → openBuzonNecesidades()  [BuzonNecesidades.js]
+            │
+            ├─> Overlay HTML: métricas + filtros + tabla
+            │
+            ├─> Carga inicial (httpService → Bearer desde localStorage)
+            │       GET /needs-inbox/stats          → tarjetas (total, por estado, top soluciones)
+            │       GET /needs-inbox?limit=100   (+ opcional status, search)
+            │
+            ├─> Todas las rutas /needs-inbox/* van con protect (JWT)  [needsInbox.routes.js]
+            │
+            ├─> Acciones en tabla
+            │       ├─> «Ver» → GET /needs-inbox/:id
+            │       │       → openDetailModal → formulario reclasificación
+            │       │       → Guardar → PUT /needs-inbox/:id/review
+            │       │             body: confirmed_solution, review_status, observations, learning_phrase (opc.)
+            │       │
+            │       ├─> «Confirmar» (rápido) → PUT /needs-inbox/:id/status
+            │       │       { review_status: 'confirmado' }
+            │       │
+            │       └─> «Descartar» → PUT /needs-inbox/:id/status
+            │               { review_status: 'descartado' }
+            │
+            ├─> Flujo “Clasificar” (si lo enlazas desde UI con data-action="clasificar")
+            │       → GET /needs-inbox/:id → openClassifyModal
+            │       → PATCH /needs-inbox/:id
+            │             confirmed_solution, review_status: 'confirmado', learning_phrase (opc.)
+            │             → alimenta aprendizaje (keywords/frases) según backend
+            │
+            ├─> Filtros: cambio estado / búsqueda (debounce ~400 ms) → nuevo GET lista
+            ├─> «Actualizar» → loadList + loadStats
+            │
+            └─> Si 401 en cualquier llamada → SweetAlert sesión + closeBuzon()
 ```
 
 ### **Estructura de datos del Excel procesado:**
@@ -734,6 +964,32 @@ export const initVariales = () => {
 
 ---
 
+## ⚙️ Tecnologías
+
+- HTML5
+- JavaScript ES6 (Modules)
+- Tailwind CSS (CDN)
+- SweetAlert2
+- SheetJS (XLSX)
+
+---
+## 🔐 Seguridad
+
+- Autenticación basada en JWT
+- Token almacenado en localStorage
+- Validación de archivos Excel (estructura y contenido)
+- Manejo de headers Authorization en requests
+
+⚠️ Consideración:
+El uso de `innerHTML` en mensajes del chat requiere que el contenido provenga de fuentes controladas.
+
+---
+
+## 🎨 Estilos
+
+- CSS personalizado (`style.css`, `form.css`, `chat-theme.css`)
+- Tailwind para layout y utilidades
+
 ## 📝 Convenciones de Código
 
 ### **Nombres de archivos:**
@@ -787,30 +1043,6 @@ console.log(result);
 - ✅ HTTP client con manejo de tokens
 - ✅ Transformación de datos antes de envío
 - ✅ Manejo de errores y estados de carga
-
----
-
-## 🔮 Roadmap / Próximas Mejoras
-
-### **Alta prioridad:**
-- [ ] Validar MIME type además de extensión de archivo
-- [ ] Implementar límite de tamaño de archivo
-- [ ] Agregar preview de datos antes de envío al backend
-- [ ] Implementar sistema de logs de errores
-
-### **Media prioridad:**
-- [ ] Implementar ChatService con backend real
-- [ ] Agregar filtros y búsqueda de productos en UI
-- [ ] Implementar cache de productos en localStorage
-- [ ] Agregar indicador de progreso para cargas grandes
-- [ ] Exportar productos a Excel
-
-### **Baja prioridad:**
-- [ ] Agregar tests unitarios (Jest/Vitest)
-- [ ] Agregar CI/CD pipeline
-- [ ] Modo oscuro/claro
-- [ ] Internacionalización (i18n)
-- [ ] PWA (Progressive Web App)
 
 ---
 
