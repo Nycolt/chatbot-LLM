@@ -1,69 +1,217 @@
-# 🚀 API Backend con Express.js y MySQL
+# ⚙️ Backend - Chatbot Fortinet
 
-Backend desarrollado con Node.js, Express.js y MySQL siguiendo las mejores prácticas de arquitectura, con autenticación JWT y uso de Stored Procedures.
+API REST desarrollada con Node.js y Express para la gestión de lógica de negocio, dimensionamiento técnico, procesamiento de datos y orquestación de inteligencia artificial (LLM).
+
+---
 
 ## 📁 Estructura del Proyecto
 
 ```
 Backend/
 ├── src/
-│   ├── config/          # Configuraciones (DB, env, logger, LLM)
-│   │   ├── database.js  # Configuración de Sequelize + MySQL
-│   │   ├── env.js       # Variables de entorno
-│   │   ├── logger.js    # Winston logger
-│   │   ├── llm.config.js # Configuración LLM (Ollama/OpenRouter)
-│   │   └── columnasAgente.js
-│   ├── controllers/     # Controladores de rutas
+│   ├── config/                    # Configuración (DB, env, logger, LLM, sizing, keywords)
+│   │   ├── database.js            # Sequelize + MySQL
+│   │   ├── env.js                 # Variables de entorno centralizadas
+│   │   ├── logger.js              # Winston + express-winston
+│   │   ├── llm.config.js          # Ollama / OpenRouter
+│   │   ├── columnasAgente.js      # Columnas / contexto del agente
+│   │   ├── sizingSchemas.js       # Schemas de formularios de dimensionamiento
+│   │   ├── solutionKeywords.js    # Keywords de soluciones Fortinet
+│   │   └── recommendationLearning.js
+│   │
+│   ├── controllers/               # Capa HTTP (req/res)
 │   │   ├── auth.controller.js
-│   │   ├── datasheet.controller.js
-│   │   ├── ollama.controller.js  # Agente conversacional
+│   │   ├── user.controller.js
 │   │   ├── product.controller.js
-│   │   └── user.controller.js
-│   ├── middlewares/     # Middlewares personalizados
-│   │   ├── auth.js      # Protección de rutas con JWT
+│   │   ├── datasheet.controller.js
+│   │   ├── datasheetPdf.controller.js
+│   │   ├── ollama.controller.js   # Agente conversacional (orquestación)
+│   │   ├── priceList.controller.js
+│   │   ├── needsInbox.controller.js
+│   │   ├── fortiwifi.controller.js
+│   │   ├── fortianalyzer.controller.js
+│   │   ├── fortiswitch.controller.js
+│   │   └── compare.controller.js
+│   │
+│   ├── middlewares/
+│   │   ├── auth.js                # JWT (protect / authorize)
+│   │   ├── validate.js            # express-validator → errores unificados
 │   │   ├── errorHandler.js
 │   │   ├── notFound.js
-│   │   └── validate.js
-│   ├── models/          # Modelos de Sequelize
+│   │   ├── productParser.js       # Intención producto en /agent/ask
+│   │   ├── datasheetPdfUpload.middleware.js   # multer PDF
+│   │   └── priceListUpload.middleware.js      # multer listas de precio
+│   │
+│   ├── models/                    # Sequelize (catálogo + legado)
+│   │   ├── associations.catalog.js   # Asociaciones Solution / ProductModel / specs / inbox
 │   │   ├── User.model.js
 │   │   ├── Product.model.js
-│   │   └── ProductTemp.model.js
-│   ├── routes/          # Definición de rutas
-│   ├── llm/             # Módulo de Language Models
-│   │   ├── prompts/     # Prompts versionados
-│   │   ├── schemas/     # JSON Schemas de validación
-│   │   ├── validators/  # Validadores AJV
-│   │   ├── examples/    # Ejemplos de uso
-│   │   └── index.js     # Punto de entrada
-│   ├── services/        # Lógica de negocio
-│   │   ├── llm/         # Adapters para proveedores LLM
-│   │   │   ├── OllamaAdapter.js    # Adapter Ollama local
-│   │   │   └── OpenRouterAdapter.js # Adapter OpenRouter cloud
-│   │   ├── llm.service.js    # Servicio LLM unificado (auto-detección)
-│   │   ├── ollama.service.js # Servicio Ollama legacy
-│   │   ├── productExtractor.service.js # Extracción inteligente
+│   │   ├── ProductTemp.model.js
+│   │   ├── Datasheet.model.js
+│   │   ├── DatasheetSource.model.js
+│   │   ├── DatasheetModelMap.model.js
+│   │   ├── FortigateSpecs.model.js
+│   │   ├── SolutionSpecs.models.js       # VM, Manager, Switch, AP, Mail, Web, …
+│   │   ├── Solution.model.js
+│   │   ├── ProductModel.model.js
+│   │   ├── ProductModelAttribute.model.js
+│   │   ├── SolutionOffer.model.js
+│   │   ├── ModelOfferLink.model.js
+│   │   ├── OfferCompatibilityRule.model.js
+│   │   ├── IntentKeyword.model.js
+│   │   ├── NeedsInbox.model.js
+│   │   ├── NeedInboxTag.model.js
+│   │   ├── LearnedSolutionKeyword.model.js
+│   │   ├── ProductLifecycle.model.js
+│   │   ├── ProductReplacement.model.js
+│   │   ├── PriceUploadBatch.model.js
+│   │   └── PriceListStaging.model.js
+│   │
+│   ├── routes/                    # Montaje en /api/v1/… (ver index.js)
+│   │   ├── index.js
+│   │   ├── auth.routes.js
+│   │   ├── user.routes.js
+│   │   ├── product.routes.js
+│   │   ├── datasheet.routes.js
+│   │   ├── datasheets.routes.js
+│   │   ├── ollama.routes.js
+│   │   ├── sizing.routes.js
+│   │   ├── priceList.routes.js
+│   │   ├── needsInbox.routes.js
+│   │   ├── fortiwifi.routes.js
+│   │   ├── fortianalyzer.routes.js
+│   │   ├── fortiswitch.routes.js
+│   │   └── compare.routes.js
+│   │
+│   ├── llm/                       # Módulo LLM (prompts, schemas, validación intent)
+│   │   ├── index.js
+│   │   ├── prompts/
+│   │   │   └── intent-extraction.v1.prompt.txt
+│   │   ├── schemas/
+│   │   │   └── intent.schema.json
+│   │   ├── validators/
+│   │   │   └── intent.validator.js
+│   │   └── examples/
+│   │       └── intent-extraction.example.js
+│   │
+│   ├── services/                  # Lógica de negocio
+│   │   ├── llm/                   # Adaptadores de proveedor
+│   │   │   ├── OllamaAdapter.js
+│   │   │   └── OpenRouterAdapter.js
+│   │   ├── llm.service.js         # Servicio unificado (auto-detección / fallback)
+│   │   ├── ollama.service.js      # Legacy / compatibilidad
+│   │   ├── TransactSQL.js         # Llamadas a stored procedures
 │   │   ├── user.service.js
 │   │   ├── product.service.js
+│   │   ├── productExtractor.service.js
 │   │   ├── Datasheet.service.js
-│   │   └── TransactSQL.js  # Servicio para SPs (estilo Dapper)
-│   ├── utils/           # Utilidades y helpers
-│   │   ├── database.utils.js
-│   │   └── StoredProcedure.js
-│   ├── examples/        # Ejemplos de uso
-│   │   └── storedProcedureExamples.js
-│   └── app.js           # Configuración de Express
-├── Docs/                # Documentación
+│   │   ├── catalogSync.service.js
+│   │   ├── productModelUpsert.service.js
+│   │   ├── sizingDispatcher.service.js
+│   │   ├── fortigateSizing.service.js
+│   │   ├── fortigateVMSizing.service.js
+│   │   ├── fortiwifiSizing.service.js
+│   │   ├── fortianalyzerSizing.service.js
+│   │   ├── fortimanagerSizing.service.js
+│   │   ├── fortiswitchSizing.service.js
+│   │   ├── solutionRecommendation.service.js
+│   │   ├── comparison.service.js
+│   │   ├── modelCompare.service.js
+│   │   ├── compareNarrative.service.js
+│   │   ├── compareFallbackRecommendation.js
+│   │   ├── lifecycle.service.js
+│   │   ├── licenseBundle.service.js
+│   │   ├── needsInbox.service.js
+│   │   ├── learnedSolutionKeywords.service.js
+│   │   ├── response.service.js
+│   │   ├── normalizer.service.js
+│   │   ├── priceListUpload.service.js
+│   │   ├── priceListParser.service.js
+│   │   ├── priceListEtl.service.js
+│   │   ├── pdfDetector.service.js
+│   │   ├── extractorRouter.js
+│   │   ├── datasheetPdf/          # Ingesta PDF → specs (FortiGate, etc.)
+│   │   │   ├── index.js
+│   │   │   ├── datasheetPdfIngest.service.js
+│   │   │   ├── pdfExtract.service.js
+│   │   │   ├── pdfMetrics.service.js
+│   │   │   ├── pdfModelIdentify.service.js
+│   │   │   ├── pdfSpecUpsert.service.js
+│   │   │   ├── pdfSolutionConsistency.service.js
+│   │   │   ├── pdfConstants.js
+│   │   │   └── metrics/
+│   │   │       └── fortigate.metrics.js
+│   │   ├── fortigate/             # Motor / flujo / rangos / catálogo FortiGate appliance
+│   │   ├── fortigateVM/           # VM: engine, flow, extractor, bundles, licencias, rangos
+│   │   ├── fortiwifi/
+│   │   ├── fortianalyzer/
+│   │   ├── fortimanager/
+│   │   └── fortiswitch/          # engine, flow, ETL, PDF, offers, cleaner, parser, …
+│   │
+│   ├── utils/
+│   │   ├── database.utils.js      # Import modelos + setupCatalogAssociations + sync
+│   │   ├── asyncHandler.js
+│   │   ├── ApiResponse.js
+│   │   ├── StoredProcedure.js
+│   │   ├── bulk.utils.js
+│   │   ├── model.utils.js
+│   │   ├── normalizeUnit.js
+│   │   ├── specUpsert.utils.js
+│   │   ├── priceListClassifier.js
+│   │   ├── recommendationFormatter.js
+│   │   └── sizingPresentation.js
+│   │
+│   ├── examples/
+│   │   ├── storedProcedureExamples.js
+│   │   ├── productParser.example.js
+│   │   └── model-utils.example.js
+│   │
+│   └── app.js                     # Express: helmet, cors, rutas, errores
+│
+├── migrations/                    # Migraciones Sequelize (tablas catálogo / specs / inbox / keywords)
+│   └── 20260323_*.js … 20260404_*.js   # (varios archivos numerados por fecha)
+│
+├── scripts/                       # Utilidades CLI: migraciones datos, seeds, debug PDF
+│   ├── migrateFortigateFromDatasheet.mjs
+│   ├── applyFortiwifiSpecsMatrix.mjs
+│   ├── applyFortianalyzerSpecsMatrix.mjs
+│   ├── applyFortimanagerSpecsPdfColumns.mjs
+│   ├── applyFortimanagerSpecsUnitColumn.mjs
+│   ├── applyFortimanagerSpecsSizingColumnNames.mjs
+│   ├── fixFortimanagerSpecsForeignKey.mjs
+│   ├── seedOfferCompatibilityRules.mjs
+│   ├── fortimanager.loadFromPdf.js
+│   ├── loadFortiSwitch.js
+│   ├── debugFortiwifiPdf.mjs
+│   ├── debugFortiswitchPdfDump.mjs
+│   └── testFortiswitchEngine.mjs
+│
+├── Docs/                          # Documentación técnica + SQL de referencia
+│   ├── audits/
+│   ├── sql/                       # Scripts .sql, matrices, migraciones documentadas, READMEs
+│   │   └── migrations/
 │   ├── AUTH_ENDPOINTS.md
-│   └── STORED_PROCEDURES.md
-├── logs/                # Archivos de log (Winston)
-├── .env                 # Variables de entorno
-├── .env.example         # Ejemplo de variables de entorno
+│   ├── STORED_PROCEDURES.md
+│   ├── LLM_README.md
+│   ├── LLM_QUICKSTART.md
+│   ├── LLM_MIGRATION_TO_ES_MODULES.md
+│   ├── DATABASE_ARCHITECTURE.md
+│   ├── DATABASE_CATALOG_LAYERS.md
+│   ├── DATASHEET_PDF_UPLOAD.md
+│   ├── PRICE_LIST_BACKEND_FILES.md
+│   ├── ARQUITECTURA_PRICE_LIST_UPLOAD.md
+│   └── … (auditorías FortiGate, runbooks, etc.)
+│
+├── logs/                          # Winston: combined.log, error.log (según entorno)
+│
+├── .env                           # (local; no versionar secretos)
+├── .env.example                   # Plantilla (si existe en tu clon)
 ├── .gitignore
 ├── package.json
-├── pnpm-lock.yaml
-└── server.js            # Punto de entrada
-```
-
+├── package-lock.json              # npm
+├── pnpm-lock.yaml                 # pnpm (si también usáis pnpm)
+└── server.js                      # Punto de entrada: DB, sync dev, servidor HTTP
+ ```
 ## 🚀 Instalación
 
 1. **Clonar el repositorio**
@@ -186,6 +334,15 @@ OPENROUTER_API_KEY=sk-or-v1-tu-clave-aqui
 
 ## 🏗️ Arquitectura
 
+El backend sigue una arquitectura en capas basada en buenas prácticas:
+
+- **MVC + Service Layer**
+- Separación de responsabilidades (routes → controllers → services → models)
+- Integración híbrida con ORM (Sequelize) y Stored Procedures
+### Flujo general
+
+Cliente → Routes → Controllers → Services → Base de datos / LLM → Respuesta
+
 ### Capas de la Aplicación
 
 1. **Routes**: Define los endpoints y aplica middlewares de validación
@@ -195,6 +352,27 @@ OPENROUTER_API_KEY=sk-or-v1-tu-clave-aqui
 5. **Middlewares**: Funciones intermedias (auth, validación, errores)
 6. **Utils**: Funciones auxiliares reutilizables
 
+## 🧩 Componentes principales
+
+- 🤖 **Agente conversacional**
+  - Integración con LLM (Ollama / OpenRouter)
+  - Procesamiento de lenguaje natural
+
+- 📊 **Motores de dimensionamiento**
+  - Servicios especializados por solución
+  - Dispatcher dinámico
+
+- 📦 **Gestión de catálogo**
+  - Modelos normalizados (Solution, ProductModel)
+  - Integración con listas de precios
+
+- 📄 **Procesamiento de datasheets**
+  - Extracción de PDFs
+  - Normalización de especificaciones técnicas
+
+- 💰 **Pipeline de precios**
+  - Carga → staging → procesamiento → almacenamiento final
+    
 ### Patrones Implementados
 
 - **MVC (Model-View-Controller)**: Separación de responsabilidades
@@ -203,6 +381,16 @@ OPENROUTER_API_KEY=sk-or-v1-tu-clave-aqui
 - **Error Handling**: Manejo centralizado de errores
 - **Async Handler**: Wrapper para funciones asíncronas
 - **API Response**: Respuestas consistentes
+## 🔐 Seguridad
+
+- Autenticación basada en JWT
+- Hash de contraseñas con bcrypt
+- Validación de entrada con express-validator
+- Protección de rutas mediante middleware
+- Control de acceso CORS configurable
+- Headers de seguridad con Helmet
+
+> ⚠️ Nota: el endpoint del agente (`/agent/ask`) actualmente es público
 
 ## 🔐 Autenticación
 
@@ -240,6 +428,12 @@ curl -X GET http://localhost:3000/api/v1/users \
 ```
 
 **Documentación completa**: [Docs/AUTH_ENDPOINTS.md](Docs/AUTH_ENDPOINTS.md)
+## 🗄️ Base de datos y lógica
+
+El sistema utiliza un enfoque híbrido:
+
+- ORM (Sequelize) para operaciones estándar
+- Stored Procedures para lógica crítica
 
 ## 🗄️ Base de Datos y Stored Procedures
 
