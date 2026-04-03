@@ -511,19 +511,6 @@ Ejemplos en [Docs/AUTH_ENDPOINTS.md](Docs/AUTH_ENDPOINTS.md)
 ### ProductTemp (ProductoTemporal)
 Similar a Product, para datos temporales de importación.
 
-## 🚧 Próximos Pasos Recomendados
-
-1. ✅ ~~Configurar base de datos MySQL~~
-2. ✅ ~~Implementar autenticación JWT~~
-3. ✅ ~~Crear Stored Procedures~~
-4. ⬜ Implementar Refresh Tokens
-5. ⬜ Agregar Rate Limiting
-6. ⬜ Implementar Roles y Permisos (RBAC)
-7. ⬜ Agregar Tests (Jest/Mocha)
-8. ⬜ Documentación con Swagger/OpenAPI
-9. ⬜ CI/CD con GitHub Actions
-10. ⬜ Dockerizar la aplicación
-
 ## 📦 Dependencias Principales
 
 - **express** - Libreria web
